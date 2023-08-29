@@ -90,7 +90,6 @@ class ProductView extends StatelessWidget {
                     )
                   : const Icon(Icons.save_alt_outlined)),
         );
-        ;
       },
     );
   }
