@@ -6,6 +6,7 @@ class Product {
   String? picture;
   double price;
   String? id;
+  String category;
 
   Product({
     required this.available,
@@ -13,6 +14,7 @@ class Product {
     this.picture,
     required this.price,
     this.id,
+    required this.category,
   });
 
   factory Product.fromRawJson(String str) => Product.fromJson(json.decode(str));
@@ -24,6 +26,7 @@ class Product {
         name: json["name"],
         picture: json["picture"],
         price: json["price"].toDouble(),
+        category: json["category"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -31,6 +34,7 @@ class Product {
         "name": name,
         "picture": picture,
         "price": price,
+        "category": category,
       };
 
   Product copy() => Product(
@@ -39,5 +43,6 @@ class Product {
         price: price,
         picture: picture,
         id: id,
+        category: category,
       );
 }

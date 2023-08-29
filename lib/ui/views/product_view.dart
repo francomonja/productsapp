@@ -122,6 +122,43 @@ class _ProductForm extends StatelessWidget {
                       const SizedBox(
                         height: 10,
                       ),
+                      ExpansionTile(
+                        title: const Text('categoría'),
+                        children: [
+                          RadioListTile(
+                            title: const Text('camping'),
+                            value: vm.camping,
+                            groupValue: vm.selectedCategory,
+                            onChanged: (value) {
+                              vm.change(vm.camping);
+                            },
+                          ),
+                          RadioListTile(
+                            title: const Text('cocina'),
+                            value: vm.cocina,
+                            groupValue: vm.selectedCategory,
+                            onChanged: (value) {
+                              vm.change(vm.cocina);
+                            },
+                          ),
+                          RadioListTile(
+                            title: const Text('varios'),
+                            value: vm.varios,
+                            groupValue: vm.selectedCategory,
+                            onChanged: (value) {
+                              vm.change(vm.varios);
+                            },
+                          ),
+                          RadioListTile(
+                            title: const Text('vasos'),
+                            value: vm.vasos,
+                            groupValue: vm.selectedCategory,
+                            onChanged: (value) {
+                              vm.change(vm.vasos);
+                            },
+                          ),
+                        ],
+                      ),
                       TextFormField(
                         onChanged: (value) => product.name = value,
                         validator: (value) {

@@ -19,13 +19,7 @@ class HomeViewViewModel extends BaseViewModel {
 
   final productsService = locator<ProductsService>();
 
-  HomeViewViewModel() {
-    loadProducts();
-  }
-
-  void onRefresh() {
-    loadProducts();
-  }
+  void onRefresh() {}
 
   Future<List<Product>> loadProducts() async {
     isLoading = true;

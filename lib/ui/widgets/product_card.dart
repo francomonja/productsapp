@@ -30,7 +30,7 @@ class ProductCard extends StatelessWidget {
 
             //TODO mostrar de manera condicional
             if (!product.available)
-              Positioned(
+              const Positioned(
                 top: 0,
                 left: 0,
                 child: _NotAvailable(),
@@ -61,6 +61,12 @@ class _NotAvailable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: 100,
+      height: 40,
+      decoration: BoxDecoration(
+          color: Colors.yellow[800],
+          borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(25), bottomRight: Radius.circular(25))),
       child: const FittedBox(
         fit: BoxFit.contain,
         child: Padding(
@@ -71,12 +77,6 @@ class _NotAvailable extends StatelessWidget {
           ),
         ),
       ),
-      width: 100,
-      height: 70,
-      decoration: BoxDecoration(
-          color: Colors.yellow[800],
-          borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(25), bottomRight: Radius.circular(25))),
     );
   }
 }
@@ -91,6 +91,13 @@ class _PriceTag extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: 125,
+      height: 35,
+      alignment: Alignment.center,
+      decoration: const BoxDecoration(
+          color: Colors.indigo,
+          borderRadius: BorderRadius.only(
+              topRight: Radius.circular(25), bottomLeft: Radius.circular(25))),
       child: FittedBox(
         fit: BoxFit.contain,
         child: Padding(
@@ -101,13 +108,6 @@ class _PriceTag extends StatelessWidget {
           ),
         ),
       ),
-      width: 75,
-      height: 35,
-      alignment: Alignment.center,
-      decoration: const BoxDecoration(
-          color: Colors.indigo,
-          borderRadius: BorderRadius.only(
-              topRight: Radius.circular(25), bottomLeft: Radius.circular(25))),
     );
   }
 }
@@ -141,7 +141,7 @@ class _ProductDetails extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
             Text(
-              product.id!,
+              product.category,
               style: const TextStyle(
                 fontSize: 15,
                 color: Colors.white,

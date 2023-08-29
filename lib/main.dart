@@ -14,7 +14,7 @@ void main() {
 
     // ProductsService productsService = locator<ProductsService>();
     // await productsService.loadProducts();
-    String initialRoute = Routes.homeView;
+    String initialRoute = Routes.categoryView;
 
     runApp(MyApp(initialRoute: initialRoute));
   }, (error, stack) {});

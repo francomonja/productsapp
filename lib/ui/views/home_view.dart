@@ -6,7 +6,8 @@ import '../../core/models/product_model.dart';
 import '../widgets/product_card.dart';
 
 class HomeView extends StatelessWidget {
-  const HomeView({super.key});
+  final List<Product> products;
+  const HomeView({super.key, required this.products});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +23,7 @@ class HomeView extends StatelessWidget {
             ],
           ),
           body: ListView.builder(
-              itemCount: vm.productsService.products.length,
+              itemCount: products.length,
               itemBuilder: (BuildContext context, int index) => GestureDetector(
                   onTap: () {
                     vm.productsService.selectedProduct =
@@ -30,7 +31,7 @@ class HomeView extends StatelessWidget {
                     vm.navigateToProductView();
                   },
                   child: ProductCard(
-                    product: vm.productsService.products[index],
+                    product: products[index],
                   ))),
           floatingActionButton: FloatingActionButton(
               child: Icon(Icons.add),
@@ -39,6 +40,7 @@ class HomeView extends StatelessWidget {
                   available: false,
                   name: '',
                   price: 0,
+                  category: '',
                 );
                 vm.navigateToProductView();
               }),
