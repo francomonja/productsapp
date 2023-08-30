@@ -10,8 +10,9 @@ import 'package:http/http.dart' as http;
 class CategoryViewViewModel extends ChangeNotifier {
   final _navigationService = locator<NavigationService>();
   final String _baseUrl = 'productsapp-6ee2d-default-rtdb.firebaseio.com';
+  String selectedCategory = '';
   bool isLoading = false;
-  final List<Product> products = [];
+  List<Product> products = [];
 
   List<Product> productList = [];
 
@@ -26,14 +27,16 @@ class CategoryViewViewModel extends ChangeNotifier {
     products.clear();
     final url = Uri.https(_baseUrl, 'products.json');
     final resp = await http.get(url);
-
-    final Map<String, dynamic> productsMap = json.decode(resp.body);
-    productsMap.forEach((key, value) {
-      final tempProduct = Product.fromJson(value);
-      tempProduct.id = key;
-      products.add(tempProduct);
-    });
-
+    try {
+      final Map<String, dynamic> productsMap = json.decode(resp.body);
+      productsMap.forEach((key, value) {
+        final tempProduct = Product.fromJson(value);
+        tempProduct.id = key;
+        products.add(tempProduct);
+      });
+    } catch (error) {
+      print('Error: $error');
+    }
     isLoading = false;
     notifyListeners();
     return products;
@@ -42,24 +45,32 @@ class CategoryViewViewModel extends ChangeNotifier {
   void onPressCamping() async {
     await loadProducts();
     findByCategory('camping');
-    await _navigationService.navigateToHomeView(products: productList);
+    selectedCategory = 'camping';
+    await _navigationService.navigateToHomeView(
+        products: productList, selectedCategory: selectedCategory);
   }
 
   void onPressVasos() async {
     await loadProducts();
     findByCategory('vasos');
-    await _navigationService.navigateToHomeView(products: productList);
+    selectedCategory = 'vasos';
+    await _navigationService.navigateToHomeView(
+        products: productList, selectedCategory: selectedCategory);
   }
 
   void onPressVarios() async {
     await loadProducts();
     findByCategory('varios');
-    await _navigationService.navigateToHomeView(products: productList);
+    selectedCategory = 'varios';
+    await _navigationService.navigateToHomeView(
+        products: productList, selectedCategory: selectedCategory);
   }
 
   void onPressCocina() async {
     await loadProducts();
     findByCategory('cocina');
-    await _navigationService.navigateToHomeView(products: productList);
+    selectedCategory = 'cocina';
+    await _navigationService.navigateToHomeView(
+        products: productList, selectedCategory: selectedCategory);
   }
 }

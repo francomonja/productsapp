@@ -12,33 +12,64 @@ import 'package:http/http.dart' as http;
 
 class HomeViewViewModel extends BaseViewModel {
   final _navigationService = locator<NavigationService>();
+  final productsService = locator<ProductsService>();
   final String _baseUrl = 'productsapp-6ee2d-default-rtdb.firebaseio.com';
-  final List<Product> products = [];
+  // List<Product> products = [];
+  List<Product> productList = [];
   final storage = FlutterSecureStorage();
-  Product? selectedProduct;
-  bool isLoading = true;
+  // Product? selectedProduct;
+  bool isLoading = false;
   bool isSaving = false;
 
-  final productsService = locator<ProductsService>();
+  // findByCategory(String salectedCategory) async {
+  //   productList = products
+  //       .where((element) => element.category.contains(salectedCategory))
+  //       .toList();
+  //   return productList;
+  // }
 
-  void onRefresh() {}
-
-  Future<List<Product>> loadProducts() async {
-    isLoading = true;
-    products.clear();
-    final url = Uri.https(_baseUrl, 'products.json');
-    final resp = await http.get(url);
-
-    final Map<String, dynamic> productsMap = json.decode(resp.body);
-    productsMap.forEach((key, value) {
-      final tempProduct = Product.fromJson(value);
-      tempProduct.id = key;
-      products.add(tempProduct);
-    });
-
-    isLoading = false;
+  init(selectedCategory) async {
+    await productsService.loadProducts();
+    productList = await findByCategory(selectedCategory);
     notifyListeners();
-    return products;
+    return productList;
+  }
+
+  onRefresh(selectedCategory) async {
+    init(selectedCategory);
+  }
+
+  findByCategory(String selectedCategory) async {
+    productList.clear();
+    productList = productsService.products
+        .where((element) => element.category.contains(selectedCategory))
+        .toList();
+    return productList;
+  }
+  // Future<List<Product>> loadProducts() async {
+  //   isLoading = true;
+  //   final url = Uri.https(_baseUrl, 'products.json');
+  //   final resp = await http.get(url);
+
+  //   final Map<String, dynamic> productsMap = json.decode(resp.body);
+  //   productsMap.forEach((key, value) {
+  //     final tempProduct = Product.fromJson(value);
+  //     tempProduct.id = key;
+  //     products.add(tempProduct);
+  //   });
+
+  //   isLoading = false;
+  //   print(products);
+  //   notifyListeners();
+  //   return products;
+  // }
+
+  void onTapProduct(id) async {
+    final url = Uri.https(_baseUrl, 'products/${id}.json');
+    final resp = await http.get(url);
+    Map<String, dynamic> jsonMap = json.decode(resp.body);
+    productsService.selectedProduct = Product.fromJson(jsonMap);
+    navigateToProductView();
   }
 
   void navigateToProductView() async {
@@ -46,22 +77,10 @@ class HomeViewViewModel extends BaseViewModel {
         productsService: productsService);
   }
 
-  void onDelete(index) async {
-    await loadProducts();
+  void onDelete(index, selectedCategory) async {
+    await productsService.onDelete(index);
 
-    try {
-      final url = Uri.https(_baseUrl, 'products/${products[index].id}.json');
-      final response = await http.delete(url);
-
-      if (response.statusCode == 200) {
-        print('Product deleted successfully');
-      } else {
-        print('Failed to delete product. Status code: ${response.statusCode}');
-      }
-    } catch (error) {
-      print('Error deleting product: $error');
-    }
-    products.removeAt(index);
+    await onRefresh(selectedCategory);
     notifyListeners();
   }
 }

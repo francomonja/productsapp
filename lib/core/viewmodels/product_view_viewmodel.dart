@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:products_app/core/services/products_service.dart';
 
 import '../../app.locator.dart';
+import '../models/product_model.dart';
 
 // enum Categoria { camping, cocina, vasos, varios }
 
@@ -37,5 +38,10 @@ class ProductViewViewModel extends ChangeNotifier {
   Future<String?> uploadImage() async {
     await productsService.uploadImage();
     return null;
+  }
+
+  Future saveOrCreateProduct(Product product) async {
+    await productsService.saveOrCreateProduct(product);
+    notifyListeners();
   }
 }

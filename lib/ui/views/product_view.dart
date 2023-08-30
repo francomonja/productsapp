@@ -45,7 +45,7 @@ class ProductView extends StatelessWidget {
                             onPressed: () async {
                               final picker = ImagePicker();
                               final XFile? pickedFile = await picker.pickImage(
-                                  source: ImageSource.camera,
+                                  source: ImageSource.gallery,
                                   imageQuality: 100);
 
                               if (pickedFile == null) {
@@ -80,8 +80,7 @@ class ProductView extends StatelessWidget {
                         productForm.product.picture = imageUrl;
                       }
 
-                      await productsService
-                          .saveOrCreateProduct(productForm.product);
+                      await vm.saveOrCreateProduct(productForm.product);
                       Navigator.of(context).pop();
                     },
               child: vm.productsService.isSaving

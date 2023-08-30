@@ -18,22 +18,26 @@ class ProductsService extends ChangeNotifier {
 
   ProductsService() {
     loadProducts();
+    notifyListeners();
   }
 
   Future<List<Product>> loadProducts() async {
+    products.clear();
     isLoading = true;
     notifyListeners();
 
     final url = Uri.https(_baseUrl, 'products.json');
     final resp = await http.get(url);
-
-    final Map<String, dynamic> productsMap = json.decode(resp.body);
-    productsMap.forEach((key, value) {
-      final tempProduct = Product.fromJson(value);
-      tempProduct.id = key;
-      products.add(tempProduct);
-    });
-
+    try {
+      final Map<String, dynamic> productsMap = json.decode(resp.body);
+      productsMap.forEach((key, value) {
+        final tempProduct = Product.fromJson(value);
+        tempProduct.id = key;
+        products.add(tempProduct);
+      });
+    } catch (error) {
+      print('Error: $error');
+    }
     isLoading = false;
     notifyListeners();
     return products;
@@ -50,7 +54,6 @@ class ProductsService extends ChangeNotifier {
       //Actualizar
       await updateProduct(product);
     }
-
     isSaving = false;
     notifyListeners();
   }
@@ -111,5 +114,25 @@ class ProductsService extends ChangeNotifier {
     newPictureFile = null;
     final decodedData = json.decode(resp.body);
     return decodedData['secure_url'];
+  }
+
+  onDelete(index) async {
+    await loadProducts();
+
+    try {
+      final url = Uri.https(_baseUrl, 'products/${products[index].id}.json');
+      final response = await http.delete(url);
+
+      if (response.statusCode == 200) {
+        print('Product deleted successfully');
+      } else {
+        print('Failed to delete product. Status code: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('Error deleting product: $error');
+    }
+    products.removeAt(index);
+    notifyListeners();
+    return products;
   }
 }

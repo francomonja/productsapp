@@ -7,45 +7,55 @@ import '../widgets/product_card.dart';
 
 class HomeView extends StatelessWidget {
   final List<Product> products;
-  const HomeView({super.key, required this.products});
+  final String selectedCategory;
+  const HomeView(
+      {super.key, required this.products, required this.selectedCategory});
 
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<HomeViewViewModel>.reactive(
       viewModelBuilder: () => HomeViewViewModel(),
+      onViewModelReady: (vm) async {
+        await vm.init(selectedCategory);
+      },
       builder: (context, vm, child) {
-        // vm.loadProducts();
         return Scaffold(
           appBar: AppBar(
-            title: Text('Products'),
+            title: Text(selectedCategory),
             actions: [
-              IconButton(onPressed: vm.onRefresh, icon: Icon(Icons.refresh)),
+              vm.isLoading
+                  ? CircularProgressIndicator()
+                  : IconButton(
+                      onPressed: () => vm.onRefresh(selectedCategory),
+                      icon: Icon(Icons.refresh))
             ],
           ),
-          body: ListView.builder(
-              itemCount: products.length,
-              itemBuilder: (BuildContext context, int index) => GestureDetector(
-                  onTap: () {
-                    vm.productsService.selectedProduct =
-                        vm.productsService.products[index].copy();
-                    vm.navigateToProductView();
-                  },
-                  child: Stack(children: [
-                    ProductCard(
-                      product: products[index],
-                    ),
-                    Positioned(
-                        bottom: 15,
-                        right: 20,
-                        child: IconButton(
-                            onPressed: () {
-                              vm.onDelete(index);
-                            },
-                            icon: const Icon(
-                              Icons.delete_forever,
-                              color: Colors.white,
-                            )))
-                  ]))),
+          body: (vm.productList.isEmpty)
+              ? const Center(child: Text('Lista vacia'))
+              : ListView.builder(
+                  itemCount: vm.productList.length,
+                  itemBuilder: (BuildContext context, int index) =>
+                      GestureDetector(
+                          onTap: () {
+                            final id = vm.productList[index].id;
+                            vm.onTapProduct(id);
+                          },
+                          child: Stack(children: [
+                            ProductCard(
+                              product: vm.productList[index],
+                            ),
+                            Positioned(
+                                bottom: 15,
+                                right: 20,
+                                child: IconButton(
+                                    onPressed: () {
+                                      vm.onDelete(index, selectedCategory);
+                                    },
+                                    icon: const Icon(
+                                      Icons.delete_forever,
+                                      color: Colors.white,
+                                    )))
+                          ]))),
           floatingActionButton: FloatingActionButton(
               child: Icon(Icons.add),
               onPressed: () {
