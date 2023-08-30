@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:uuid/uuid.dart';
 
 import '../models/product_model.dart';
 
@@ -15,6 +16,7 @@ class ProductsService extends ChangeNotifier {
   bool isLoading = true;
   bool isSaving = false;
   File? newPictureFile;
+  var uuid = Uuid();
 
   ProductsService() {
     loadProducts();
@@ -67,6 +69,7 @@ class ProductsService extends ChangeNotifier {
     final decodedData = resp.body;
 
     //TODO actualizar listado de productos
+    await loadProducts();
     final index = products.indexWhere((element) => element.id == product.id);
     products[index] = product;
 
@@ -74,13 +77,12 @@ class ProductsService extends ChangeNotifier {
   }
 
   Future<String> createProduct(Product product) async {
-    final url = Uri.https(_baseUrl, 'products.json', {
+    product.id = uuid.v4();
+    final url = Uri.https(_baseUrl, 'products/${product.id}.json', {
       'auth': await storage.read(key: 'token') ?? '',
     });
-    final resp = await http.post(url, body: product.toRawJson());
-    final decodedData = json.decode(resp.body);
+    await http.put(url, body: product.toRawJson());
 
-    product.id = decodedData['name'];
     products.add(product);
     return product.id!;
   }
