@@ -30,9 +30,22 @@ class HomeView extends StatelessWidget {
                         vm.productsService.products[index].copy();
                     vm.navigateToProductView();
                   },
-                  child: ProductCard(
-                    product: products[index],
-                  ))),
+                  child: Stack(children: [
+                    ProductCard(
+                      product: products[index],
+                    ),
+                    Positioned(
+                        bottom: 15,
+                        right: 20,
+                        child: IconButton(
+                            onPressed: () {
+                              vm.onDelete(index);
+                            },
+                            icon: const Icon(
+                              Icons.delete_forever,
+                              color: Colors.white,
+                            )))
+                  ]))),
           floatingActionButton: FloatingActionButton(
               child: Icon(Icons.add),
               onPressed: () {
@@ -40,7 +53,7 @@ class HomeView extends StatelessWidget {
                   available: false,
                   name: '',
                   price: 0,
-                  category: '',
+                  category: 'varios',
                 );
                 vm.navigateToProductView();
               }),

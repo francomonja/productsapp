@@ -34,7 +34,7 @@ class ProductCard extends StatelessWidget {
                 top: 0,
                 left: 0,
                 child: _NotAvailable(),
-              )
+              ),
           ],
         ),
       ),
@@ -176,12 +176,12 @@ class _BackgroundImage extends StatelessWidget {
         width: double.infinity,
         height: 200,
         child: url == null
-            ? Image(
+            ? const Image(
                 image: AssetImage('assets/no-image.png'),
                 fit: BoxFit.cover,
               )
             : FadeInImage(
-                placeholder: AssetImage('assets/jar-loading.gif'),
+                placeholder: const AssetImage('assets/jar-loading.gif'),
                 image: NetworkImage(url!),
                 fit: BoxFit.cover,
               ),
