@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:products_app/core/viewmodels/home_view_viewmodel.dart';
+import 'package:products_app/ui/widgets/search_widget.dart';
 import 'package:stacked/stacked.dart';
 
 import '../../core/models/product_model.dart';
@@ -19,7 +20,10 @@ class HomeView extends StatelessWidget {
       builder: (context, vm, child) {
         return Scaffold(
           appBar: AppBar(
-            title: Text('productos'),
+            title: SearchWidget(
+              controller: vm.search,
+              onChanged: vm.findByCategory,
+            ),
             actions: [
               DropDownWidget(
                 selectedValue: vm.selectedCategory,

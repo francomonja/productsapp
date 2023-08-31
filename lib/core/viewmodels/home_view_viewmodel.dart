@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:products_app/app.router.dart';
 import 'package:products_app/core/services/category_service.dart';
@@ -20,9 +21,10 @@ class HomeViewViewModel extends BaseViewModel {
   List<Product> products = [];
   List<Product> productList = [];
   final storage = FlutterSecureStorage();
-  // Product? selectedProduct;
   bool isLoading = false;
   bool isSaving = false;
+
+  final TextEditingController search = TextEditingController();
 
   Category selectedCategory = Category(name: 'Todas las categorias');
   final List<Category> categoryList = [
@@ -33,11 +35,14 @@ class HomeViewViewModel extends BaseViewModel {
     Category(name: 'Cocina'),
   ];
 
-  findByCategory(String selectedCategory) async {
-    if (selectedCategory == 'Todas las categorias') {
+  findByCategory() async {
+    if (selectedCategory.name == 'Todas las categorias') {
       productList = products;
     } else {
-      productList = products.where((element) => element.category.toLowerCase().contains(selectedCategory.toLowerCase())).toList();
+      productList = products.where((element) => element.category.toLowerCase().contains(selectedCategory.name.toLowerCase())).toList();
+    }
+    if (search.text.isNotEmpty) {
+      productList = productList.where((element) => element.name.toLowerCase().contains(search.text.toLowerCase())).toList();
     }
     notifyListeners();
   }
@@ -45,27 +50,8 @@ class HomeViewViewModel extends BaseViewModel {
   Future<void> init() async {
     products = await productsService.loadProducts();
     productList = products;
-    // await categoryService.loadCategory();
     notifyListeners();
   }
-
-  // Future<List<Product>> loadProducts() async {
-  //   isLoading = true;
-  //   final url = Uri.https(_baseUrl, 'products.json');
-  //   final resp = await http.get(url);
-
-  //   final Map<String, dynamic> productsMap = json.decode(resp.body);
-  //   productsMap.forEach((key, value) {
-  //     final tempProduct = Product.fromJson(value);
-  //     tempProduct.id = key;
-  //     products.add(tempProduct);
-  //   });
-
-  //   isLoading = false;
-  //   print(products);
-  //   notifyListeners();
-  //   return products;
-  // }
 
   void onTapProduct(id) async {
     final url = Uri.https(_baseUrl, 'products/${id}.json');
@@ -88,7 +74,7 @@ class HomeViewViewModel extends BaseViewModel {
 
   void onChangeCategory(value) {
     selectedCategory = value;
-    findByCategory(selectedCategory.name);
+    findByCategory();
     notifyListeners();
   }
 }
