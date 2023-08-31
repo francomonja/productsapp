@@ -18,10 +18,10 @@ class CategoryView extends StatelessWidget {
                   height: 20,
                 ),
                 GestureDetector(
-                  onTap: () => vm.onPressCamping(),
+                  // onTap: () => vm.onPressCamping(),
                   child: Container(
                     height: 75,
-                    child: const Card(
+                    child: Card(
                       elevation: 1,
                       child: Padding(
                         padding: EdgeInsets.fromLTRB(10, 5, 10, 10),
@@ -41,10 +41,10 @@ class CategoryView extends StatelessWidget {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () => vm.onPressVasos(),
+                  // onTap: () => vm.onPressVasos(),
                   child: Container(
                     height: 75,
-                    child: const Card(
+                    child: Card(
                       elevation: 1,
                       child: Padding(
                         padding: EdgeInsets.fromLTRB(10, 5, 10, 10),
@@ -64,10 +64,10 @@ class CategoryView extends StatelessWidget {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () => vm.onPressCocina(),
+                  // onTap: () => vm.onPressCocina(),
                   child: Container(
                     height: 75,
-                    child: const Card(
+                    child: Card(
                       elevation: 1,
                       child: Padding(
                         padding: EdgeInsets.fromLTRB(10, 5, 10, 10),
@@ -87,10 +87,10 @@ class CategoryView extends StatelessWidget {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () => vm.onPressVarios(),
+                  // onTap: () => vm.onPressVarios(),
                   child: Container(
                     height: 75,
-                    child: const Card(
+                    child: Card(
                       elevation: 1,
                       child: Padding(
                         padding: EdgeInsets.fromLTRB(10, 5, 10, 10),

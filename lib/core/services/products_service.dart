@@ -8,7 +8,7 @@ import 'package:uuid/uuid.dart';
 
 import '../models/product_model.dart';
 
-class ProductsService extends ChangeNotifier {
+class ProductsService {
   final String _baseUrl = 'productsapp-6ee2d-default-rtdb.firebaseio.com';
   final List<Product> products = [];
   final storage = FlutterSecureStorage();
@@ -18,37 +18,22 @@ class ProductsService extends ChangeNotifier {
   File? newPictureFile;
   var uuid = Uuid();
 
-  ProductsService() {
-    loadProducts();
-    notifyListeners();
-  }
-
   Future<List<Product>> loadProducts() async {
-    products.clear();
-    isLoading = true;
-    notifyListeners();
-
+    List<Product> tempProduct = [];
     final url = Uri.https(_baseUrl, 'products.json');
     final resp = await http.get(url);
     try {
       final Map<String, dynamic> productsMap = json.decode(resp.body);
       productsMap.forEach((key, value) {
-        final tempProduct = Product.fromJson(value);
-        tempProduct.id = key;
-        products.add(tempProduct);
+        tempProduct.add(Product.fromJson(value));
       });
     } catch (error) {
       print('Error: $error');
     }
-    isLoading = false;
-    notifyListeners();
-    return products;
+    return tempProduct;
   }
 
   Future saveOrCreateProduct(Product product) async {
-    isSaving = true;
-    notifyListeners();
-
     if (product.id == null) {
       //Crear
       await createProduct(product);
@@ -56,8 +41,6 @@ class ProductsService extends ChangeNotifier {
       //Actualizar
       await updateProduct(product);
     }
-    isSaving = false;
-    notifyListeners();
   }
 
   Future<String> updateProduct(Product product) async {
@@ -67,11 +50,6 @@ class ProductsService extends ChangeNotifier {
     final resp = await http.put(url, body: product.toRawJson());
     // ignore: unused_local_variable
     final decodedData = resp.body;
-
-    //TODO actualizar listado de productos
-    await loadProducts();
-    final index = products.indexWhere((element) => element.id == product.id);
-    products[index] = product;
 
     return product.id!;
   }
@@ -83,27 +61,20 @@ class ProductsService extends ChangeNotifier {
     });
     await http.put(url, body: product.toRawJson());
 
-    products.add(product);
     return product.id!;
   }
 
   void updateSelectedProductImage(String path) {
     selectedProduct!.picture = path;
     newPictureFile = File.fromUri(Uri(path: path));
-    notifyListeners();
   }
 
   Future<String?> uploadImage() async {
     if (newPictureFile == null) return null;
 
-    isSaving = true;
-    notifyListeners();
-
-    final url = Uri.parse(
-        'https://api.cloudinary.com/v1_1/dgagjc77g/image/upload?upload_preset=puyyq9zb');
+    final url = Uri.parse('https://api.cloudinary.com/v1_1/dgagjc77g/image/upload?upload_preset=puyyq9zb');
     final imageUploadRequest = http.MultipartRequest('POST', url);
-    final file =
-        await http.MultipartFile.fromPath('file', newPictureFile!.path);
+    final file = await http.MultipartFile.fromPath('file', newPictureFile!.path);
     imageUploadRequest.files.add(file);
 
     final streamResponse = await imageUploadRequest.send();
@@ -118,11 +89,9 @@ class ProductsService extends ChangeNotifier {
     return decodedData['secure_url'];
   }
 
-  onDelete(index) async {
-    await loadProducts();
-
+  onDelete(id) async {
     try {
-      final url = Uri.https(_baseUrl, 'products/${products[index].id}.json');
+      final url = Uri.https(_baseUrl, 'products/$id.json');
       final response = await http.delete(url);
 
       if (response.statusCode == 200) {
@@ -133,8 +102,5 @@ class ProductsService extends ChangeNotifier {
     } catch (error) {
       print('Error deleting product: $error');
     }
-    products.removeAt(index);
-    notifyListeners();
-    return products;
   }
 }

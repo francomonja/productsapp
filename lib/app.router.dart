@@ -7,13 +7,12 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:flutter/material.dart' as _i5;
 import 'package:flutter/material.dart';
-import 'package:products_app/core/models/product_model.dart' as _i6;
-import 'package:products_app/core/services/products_service.dart' as _i7;
+import 'package:products_app/core/services/products_service.dart' as _i6;
 import 'package:products_app/ui/views/category_view.dart' as _i4;
 import 'package:products_app/ui/views/home_view.dart' as _i2;
 import 'package:products_app/ui/views/product_view.dart' as _i3;
 import 'package:stacked/stacked.dart' as _i1;
-import 'package:stacked_services/stacked_services.dart' as _i8;
+import 'package:stacked_services/stacked_services.dart' as _i7;
 
 class Routes {
   static const homeView = '/home-view';
@@ -47,12 +46,8 @@ class StackedRouter extends _i1.RouterBase {
 
   final _pagesMap = <Type, _i1.StackedRouteFactory>{
     _i2.HomeView: (data) {
-      final args = data.getArgs<HomeViewArguments>(nullOk: false);
       return _i5.MaterialPageRoute<dynamic>(
-        builder: (context) => _i2.HomeView(
-            key: args.key,
-            products: args.products,
-            selectedCategory: args.selectedCategory),
+        builder: (context) => const _i2.HomeView(),
         settings: data,
       );
     },
@@ -78,38 +73,6 @@ class StackedRouter extends _i1.RouterBase {
   Map<Type, _i1.StackedRouteFactory> get pagesMap => _pagesMap;
 }
 
-class HomeViewArguments {
-  const HomeViewArguments({
-    this.key,
-    required this.products,
-    required this.selectedCategory,
-  });
-
-  final _i5.Key? key;
-
-  final List<_i6.Product> products;
-
-  final String selectedCategory;
-
-  @override
-  String toString() {
-    return '{"key": "$key", "products": "$products", "selectedCategory": "$selectedCategory"}';
-  }
-
-  @override
-  bool operator ==(covariant HomeViewArguments other) {
-    if (identical(this, other)) return true;
-    return other.key == key &&
-        other.products == products &&
-        other.selectedCategory == selectedCategory;
-  }
-
-  @override
-  int get hashCode {
-    return key.hashCode ^ products.hashCode ^ selectedCategory.hashCode;
-  }
-}
-
 class ProductViewArguments {
   const ProductViewArguments({
     this.key,
@@ -118,7 +81,7 @@ class ProductViewArguments {
 
   final _i5.Key? key;
 
-  final _i7.ProductsService productsService;
+  final _i6.ProductsService productsService;
 
   @override
   String toString() {
@@ -137,20 +100,15 @@ class ProductViewArguments {
   }
 }
 
-extension NavigatorStateExtension on _i8.NavigationService {
-  Future<dynamic> navigateToHomeView({
-    _i5.Key? key,
-    required List<_i6.Product> products,
-    required String selectedCategory,
+extension NavigatorStateExtension on _i7.NavigationService {
+  Future<dynamic> navigateToHomeView([
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
         transition,
-  }) async {
+  ]) async {
     return navigateTo<dynamic>(Routes.homeView,
-        arguments: HomeViewArguments(
-            key: key, products: products, selectedCategory: selectedCategory),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -159,7 +117,7 @@ extension NavigatorStateExtension on _i8.NavigationService {
 
   Future<dynamic> navigateToProductView({
     _i5.Key? key,
-    required _i7.ProductsService productsService,
+    required _i6.ProductsService productsService,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -189,19 +147,14 @@ extension NavigatorStateExtension on _i8.NavigationService {
         transition: transition);
   }
 
-  Future<dynamic> replaceWithHomeView({
-    _i5.Key? key,
-    required List<_i6.Product> products,
-    required String selectedCategory,
+  Future<dynamic> replaceWithHomeView([
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
         transition,
-  }) async {
+  ]) async {
     return replaceWith<dynamic>(Routes.homeView,
-        arguments: HomeViewArguments(
-            key: key, products: products, selectedCategory: selectedCategory),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -210,7 +163,7 @@ extension NavigatorStateExtension on _i8.NavigationService {
 
   Future<dynamic> replaceWithProductView({
     _i5.Key? key,
-    required _i7.ProductsService productsService,
+    required _i6.ProductsService productsService,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,

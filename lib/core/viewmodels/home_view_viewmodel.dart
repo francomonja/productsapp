@@ -2,10 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:products_app/app.router.dart';
+import 'package:products_app/core/services/category_service.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../../app.locator.dart';
+import '../models/category_model.dart';
 import '../models/product_model.dart';
 import '../services/products_service.dart';
 import 'package:http/http.dart' as http;
@@ -13,39 +15,40 @@ import 'package:http/http.dart' as http;
 class HomeViewViewModel extends BaseViewModel {
   final _navigationService = locator<NavigationService>();
   final productsService = locator<ProductsService>();
+  final categoryService = locator<CategoryService>();
   final String _baseUrl = 'productsapp-6ee2d-default-rtdb.firebaseio.com';
-  // List<Product> products = [];
+  List<Product> products = [];
   List<Product> productList = [];
   final storage = FlutterSecureStorage();
   // Product? selectedProduct;
   bool isLoading = false;
   bool isSaving = false;
 
-  // findByCategory(String salectedCategory) async {
-  //   productList = products
-  //       .where((element) => element.category.contains(salectedCategory))
-  //       .toList();
-  //   return productList;
-  // }
-
-  init(selectedCategory) async {
-    await productsService.loadProducts();
-    productList = await findByCategory(selectedCategory);
-    notifyListeners();
-    return productList;
-  }
-
-  onRefresh(selectedCategory) async {
-    init(selectedCategory);
-  }
+  Category selectedCategory = Category(name: 'Todas las categorias');
+  final List<Category> categoryList = [
+    Category(name: 'Todas las categorias'),
+    Category(name: 'Camping'),
+    Category(name: 'Vasos'),
+    Category(name: 'Varios'),
+    Category(name: 'Cocina'),
+  ];
 
   findByCategory(String selectedCategory) async {
-    productList.clear();
-    productList = productsService.products
-        .where((element) => element.category.contains(selectedCategory))
-        .toList();
-    return productList;
+    if (selectedCategory == 'Todas las categorias') {
+      productList = products;
+    } else {
+      productList = products.where((element) => element.category.toLowerCase().contains(selectedCategory.toLowerCase())).toList();
+    }
+    notifyListeners();
   }
+
+  Future<void> init() async {
+    products = await productsService.loadProducts();
+    productList = products;
+    // await categoryService.loadCategory();
+    notifyListeners();
+  }
+
   // Future<List<Product>> loadProducts() async {
   //   isLoading = true;
   //   final url = Uri.https(_baseUrl, 'products.json');
@@ -73,14 +76,19 @@ class HomeViewViewModel extends BaseViewModel {
   }
 
   void navigateToProductView() async {
-    await _navigationService.navigateToProductView(
-        productsService: productsService);
+    await _navigationService.navigateToProductView(productsService: productsService);
   }
 
-  void onDelete(index, selectedCategory) async {
-    await productsService.onDelete(index);
+  void onDelete(id) async {
+    await productsService.onDelete(id);
+    productList.removeWhere((element) => element.id == id);
+    products.removeWhere((element) => element.id == id);
+    notifyListeners();
+  }
 
-    await onRefresh(selectedCategory);
+  void onChangeCategory(value) {
+    selectedCategory = value;
+    findByCategory(selectedCategory.name);
     notifyListeners();
   }
 }

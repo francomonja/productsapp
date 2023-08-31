@@ -18,59 +18,58 @@ class CategoryViewViewModel extends ChangeNotifier {
 
   void findByCategory(String value) {
     productList.clear();
-    productList =
-        products.where((element) => element.category.contains(value)).toList();
+    productList = products.where((element) => element.category.contains(value)).toList();
   }
 
-  Future<List<Product>> loadProducts() async {
-    isLoading = true;
-    products.clear();
-    final url = Uri.https(_baseUrl, 'products.json');
-    final resp = await http.get(url);
-    try {
-      final Map<String, dynamic> productsMap = json.decode(resp.body);
-      productsMap.forEach((key, value) {
-        final tempProduct = Product.fromJson(value);
-        tempProduct.id = key;
-        products.add(tempProduct);
-      });
-    } catch (error) {
-      print('Error: $error');
-    }
-    isLoading = false;
-    notifyListeners();
-    return products;
-  }
+  // Future<List<Product>> loadProducts() async {
+  //   isLoading = true;
+  //   products.clear();
+  //   final url = Uri.https(_baseUrl, 'products.json');
+  //   final resp = await http.get(url);
+  //   try {
+  //     final Map<String, dynamic> productsMap = json.decode(resp.body);
+  //     productsMap.forEach((key, value) {
+  //       final tempProduct = Product.fromJson(value);
+  //       tempProduct.id = key;
+  //       products.add(tempProduct);
+  //     });
+  //   } catch (error) {
+  //     print('Error: $error');
+  //   }
+  //   isLoading = false;
+  //   notifyListeners();
+  //   return products;
+  // }
 
-  void onPressCamping() async {
-    await loadProducts();
-    findByCategory('camping');
-    selectedCategory = 'camping';
-    await _navigationService.navigateToHomeView(
-        products: productList, selectedCategory: selectedCategory);
-  }
+  // void onPressCamping() async {
+  //   await loadProducts();
+  //   findByCategory('camping');
+  //   selectedCategory = 'camping';
+  //   await _navigationService.navigateToHomeView(
+  //       products: productList, selectedCategory: selectedCategory);
+  // }
 
-  void onPressVasos() async {
-    await loadProducts();
-    findByCategory('vasos');
-    selectedCategory = 'vasos';
-    await _navigationService.navigateToHomeView(
-        products: productList, selectedCategory: selectedCategory);
-  }
+  // void onPressVasos() async {
+  //   await loadProducts();
+  //   findByCategory('vasos');
+  //   selectedCategory = 'vasos';
+  //   await _navigationService.navigateToHomeView(
+  //       products: productList, selectedCategory: selectedCategory);
+  // }
 
-  void onPressVarios() async {
-    await loadProducts();
-    findByCategory('varios');
-    selectedCategory = 'varios';
-    await _navigationService.navigateToHomeView(
-        products: productList, selectedCategory: selectedCategory);
-  }
+  // void onPressVarios() async {
+  //   await loadProducts();
+  //   findByCategory('varios');
+  //   selectedCategory = 'varios';
+  //   await _navigationService.navigateToHomeView(
+  //       products: productList, selectedCategory: selectedCategory);
+  // }
 
-  void onPressCocina() async {
-    await loadProducts();
-    findByCategory('cocina');
-    selectedCategory = 'cocina';
-    await _navigationService.navigateToHomeView(
-        products: productList, selectedCategory: selectedCategory);
-  }
+  // void onPressCocina() async {
+  //   await loadProducts();
+  //   findByCategory('cocina');
+  //   selectedCategory = 'cocina';
+  //   await _navigationService.navigateToHomeView(
+  //       products: productList, selectedCategory: selectedCategory);
+  // }
 }

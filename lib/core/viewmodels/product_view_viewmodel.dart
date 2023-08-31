@@ -1,7 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:products_app/app.router.dart';
 import 'package:products_app/core/services/products_service.dart';
+import 'package:stacked_services/stacked_services.dart';
 
 import '../../app.locator.dart';
 import '../models/product_model.dart';
@@ -10,6 +12,7 @@ import '../models/product_model.dart';
 
 class ProductViewViewModel extends ChangeNotifier {
   final productsService = locator<ProductsService>();
+  final NavigationService _navigationService = locator<NavigationService>();
   File? newPictureFile;
 
   String camping = 'camping';
@@ -25,8 +28,7 @@ class ProductViewViewModel extends ChangeNotifier {
   }
 
   void updateAvailability(bool value) {
-    productsService.selectedProduct!.available =
-        !productsService.selectedProduct!.available;
+    productsService.selectedProduct!.available = !productsService.selectedProduct!.available;
     notifyListeners();
   }
 
@@ -42,6 +44,6 @@ class ProductViewViewModel extends ChangeNotifier {
 
   Future saveOrCreateProduct(Product product) async {
     await productsService.saveOrCreateProduct(product);
-    notifyListeners();
+    await _navigationService.pushNamedAndRemoveUntil(Routes.homeView);
   }
 }
