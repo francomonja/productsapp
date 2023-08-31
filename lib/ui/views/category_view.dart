@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:products_app/core/services/category_service.dart';
 import 'package:products_app/core/viewmodels/category_view_viewmodel.dart';
 import 'package:stacked/stacked.dart';
 
 class CategoryView extends StatelessWidget {
-  const CategoryView({super.key});
+  final CategoryService categoryService;
+  const CategoryView({super.key, required this.categoryService});
 
   @override
   Widget build(BuildContext context) {
@@ -11,103 +13,37 @@ class CategoryView extends StatelessWidget {
       viewModelBuilder: () => CategoryViewViewModel(),
       builder: (context, vm, child) {
         return Scaffold(
-          body: SafeArea(
+          body: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const SizedBox(
-                  height: 20,
+                Text('Añadir Categoría'),
+                TextFormField(
+                  onChanged: (value) =>
+                      categoryService.selectedCategory!.name = value,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'el nombre es obligatorio';
+                    }
+                    return null;
+                  },
+                  autofocus: true,
+                  controller: vm.categoryController,
                 ),
-                GestureDetector(
-                  // onTap: () => vm.onPressCamping(),
-                  child: Container(
-                    height: 75,
-                    child: Card(
-                      elevation: 1,
-                      child: Padding(
-                        padding: EdgeInsets.fromLTRB(10, 5, 10, 10),
-                        child: Column(
-                          children: [
-                            Align(
-                              alignment: Alignment.bottomLeft,
-                              child: Text(
-                                'Camping',
-                                style: TextStyle(fontSize: 20),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    FilledButton(
+                      onPressed: vm.navigateToHomeView,
+                      child: Text('Cancelar'),
                     ),
-                  ),
-                ),
-                GestureDetector(
-                  // onTap: () => vm.onPressVasos(),
-                  child: Container(
-                    height: 75,
-                    child: Card(
-                      elevation: 1,
-                      child: Padding(
-                        padding: EdgeInsets.fromLTRB(10, 5, 10, 10),
-                        child: Column(
-                          children: [
-                            Align(
-                              alignment: Alignment.bottomLeft,
-                              child: Text(
-                                'Vasos',
-                                style: TextStyle(fontSize: 20),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                GestureDetector(
-                  // onTap: () => vm.onPressCocina(),
-                  child: Container(
-                    height: 75,
-                    child: Card(
-                      elevation: 1,
-                      child: Padding(
-                        padding: EdgeInsets.fromLTRB(10, 5, 10, 10),
-                        child: Column(
-                          children: [
-                            Align(
-                              alignment: Alignment.bottomLeft,
-                              child: Text(
-                                'Cocina',
-                                style: TextStyle(fontSize: 20),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                GestureDetector(
-                  // onTap: () => vm.onPressVarios(),
-                  child: Container(
-                    height: 75,
-                    child: Card(
-                      elevation: 1,
-                      child: Padding(
-                        padding: EdgeInsets.fromLTRB(10, 5, 10, 10),
-                        child: Column(
-                          children: [
-                            Align(
-                              alignment: Alignment.bottomLeft,
-                              child: Text(
-                                'Varios',
-                                style: TextStyle(fontSize: 20),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
+                    FilledButton(
+                      onPressed: () =>
+                          vm.createCategory(categoryService.selectedCategory!),
+                      child: Text('Guardar'),
+                    )
+                  ],
                 )
               ],
             ),

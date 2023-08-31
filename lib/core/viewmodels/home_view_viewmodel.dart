@@ -27,29 +27,32 @@ class HomeViewViewModel extends BaseViewModel {
   final TextEditingController search = TextEditingController();
 
   Category selectedCategory = Category(name: 'Todas las categorias');
-  final List<Category> categoryList = [
-    Category(name: 'Todas las categorias'),
-    Category(name: 'Camping'),
-    Category(name: 'Vasos'),
-    Category(name: 'Varios'),
-    Category(name: 'Cocina'),
-  ];
+  List<Category> categoryList = [];
 
   findByCategory() async {
     if (selectedCategory.name == 'Todas las categorias') {
       productList = products;
     } else {
-      productList = products.where((element) => element.category.toLowerCase().contains(selectedCategory.name.toLowerCase())).toList();
+      productList = products
+          .where((element) => element.category
+              .toLowerCase()
+              .contains(selectedCategory.name.toLowerCase()))
+          .toList();
     }
     if (search.text.isNotEmpty) {
-      productList = productList.where((element) => element.name.toLowerCase().contains(search.text.toLowerCase())).toList();
+      productList = productList
+          .where((element) =>
+              element.name.toLowerCase().contains(search.text.toLowerCase()))
+          .toList();
     }
     notifyListeners();
   }
 
   Future<void> init() async {
+    categoryList = await categoryService.loadCategory();
     products = await productsService.loadProducts();
     productList = products;
+
     notifyListeners();
   }
 
@@ -62,7 +65,13 @@ class HomeViewViewModel extends BaseViewModel {
   }
 
   void navigateToProductView() async {
-    await _navigationService.navigateToProductView(productsService: productsService);
+    await _navigationService.navigateToProductView(
+        productsService: productsService);
+  }
+
+  void navigateToCategoryView() async {
+    await _navigationService.navigateToCategoryView(
+        categoryService: categoryService);
   }
 
   void onDelete(id) async {
@@ -75,6 +84,11 @@ class HomeViewViewModel extends BaseViewModel {
   void onChangeCategory(value) {
     selectedCategory = value;
     findByCategory();
+    notifyListeners();
+  }
+
+  Future<void> deleteCategory(id) async {
+    await categoryService.onDelete(id);
     notifyListeners();
   }
 }
