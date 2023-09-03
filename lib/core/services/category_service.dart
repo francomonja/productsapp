@@ -12,6 +12,7 @@ class CategoryService {
   final storage = FlutterSecureStorage();
   Category? selectedCategory;
   var uuid = Uuid();
+  List<Category> listCategories = [];
 
   Future<List<Category>> loadCategory() async {
     List<Category> categoryList = [];
@@ -27,6 +28,7 @@ class CategoryService {
     } catch (error) {
       print('Error: $error');
     }
+    listCategories = categoryList;
     return categoryList;
   }
 

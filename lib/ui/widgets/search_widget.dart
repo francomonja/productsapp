@@ -13,17 +13,17 @@ class SearchWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 40,
-      width: MediaQuery.of(context).size.width * 0.75,
+      // width: MediaQuery.of(context).size.width * 0.70,
       child: TextFormField(
         controller: controller,
         decoration: InputDecoration(
+            contentPadding: const EdgeInsets.symmetric(vertical: 10),
             prefixIcon: const Icon(
               Icons.search,
               color: Colors.grey,
             ),
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(40),
+              borderRadius: BorderRadius.circular(10),
             )),
         onChanged: (value) => onChanged(),
       ),

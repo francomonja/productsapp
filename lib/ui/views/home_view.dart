@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:products_app/core/models/category_model.dart';
 import 'package:products_app/core/viewmodels/home_view_viewmodel.dart';
-import 'package:products_app/ui/widgets/search_widget.dart';
+import 'package:products_app/ui/widgets/side_menu.dart';
 import 'package:stacked/stacked.dart';
 
-import '../../core/models/product_model.dart';
-import '../widgets/dropdown_widget.dart';
 import '../widgets/product_card.dart';
 
 class HomeView extends StatelessWidget {
@@ -13,6 +10,7 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scaffoldKey = GlobalKey<ScaffoldState>();
     return ViewModelBuilder<HomeViewViewModel>.reactive(
       viewModelBuilder: () => HomeViewViewModel(),
       onViewModelReady: (vm) async {
@@ -21,59 +19,9 @@ class HomeView extends StatelessWidget {
       builder: (context, vm, child) {
         return Scaffold(
           appBar: AppBar(
-            actions: [],
+            title: Text(vm.selectedCategory.name),
           ),
-          endDrawer: SafeArea(
-            child: Drawer(
-              backgroundColor: Colors.blue,
-              child: Column(
-                children: [
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  SearchWidget(
-                    controller: vm.search,
-                    onChanged: vm.findByCategory,
-                  ),
-                  DropDownWidget(
-                    selectedValue: vm.selectedCategory,
-                    onChanged: vm.onChangeCategory,
-                    categoriesList: vm.categoryList,
-                  ),
-                  const SizedBox(
-                    height: 50,
-                  ),
-                  ListTile(
-                    title: Text("Añadir Producto"),
-                    onTap: () {
-                      vm.productsService.selectedProduct = Product(
-                        available: false,
-                        name: '',
-                        price: 0,
-                        category: 'varios',
-                      );
-                      vm.navigateToProductView();
-                    },
-                  ),
-                  ListTile(
-                    title: Text("Añadir Categoria"),
-                    onTap: () {
-                      vm.categoryService.selectedCategory = Category(
-                        name: '',
-                      );
-                      vm.navigateToCategoryView();
-                    },
-                  ),
-                  ListTile(
-                    title: Text("Eliminar Categoria"),
-                    onTap: () {
-                      //TODO: añadir eliminar con dialogo en pantalla
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ),
+          endDrawer: SideMenu(scaffoldKey: scaffoldKey, vm: vm),
           body: (vm.productList.isEmpty)
               ? const Center(child: Text('Lista vacia'))
               : ListView.builder(

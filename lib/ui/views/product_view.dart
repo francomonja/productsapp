@@ -19,6 +19,9 @@ class ProductView extends StatelessWidget {
     final productForm = ProductFormProvider(productsService.selectedProduct!);
     return ViewModelBuilder<ProductViewViewModel>.reactive(
       viewModelBuilder: () => ProductViewViewModel(),
+      onViewModelReady: (vm) async {
+        await vm.init();
+      },
       builder: (context, vm, child) {
         return Scaffold(
           body: SingleChildScrollView(
@@ -106,6 +109,9 @@ class _ProductForm extends StatelessWidget {
     final product = productForm.product;
     return ViewModelBuilder<ProductViewViewModel>.reactive(
         viewModelBuilder: () => ProductViewViewModel(),
+        onViewModelReady: (vm) async {
+          await vm.init();
+        },
         builder: (context, vm, child) {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -120,43 +126,6 @@ class _ProductForm extends StatelessWidget {
                     children: [
                       const SizedBox(
                         height: 10,
-                      ),
-                      ExpansionTile(
-                        title: const Text('categoría'),
-                        children: [
-                          RadioListTile(
-                            title: const Text('camping'),
-                            value: vm.camping,
-                            groupValue: vm.selectedCategory,
-                            onChanged: (value) {
-                              vm.change(vm.camping);
-                            },
-                          ),
-                          RadioListTile(
-                            title: const Text('cocina'),
-                            value: vm.cocina,
-                            groupValue: vm.selectedCategory,
-                            onChanged: (value) {
-                              vm.change(vm.cocina);
-                            },
-                          ),
-                          RadioListTile(
-                            title: const Text('varios'),
-                            value: vm.varios,
-                            groupValue: vm.selectedCategory,
-                            onChanged: (value) {
-                              vm.change(vm.varios);
-                            },
-                          ),
-                          RadioListTile(
-                            title: const Text('vasos'),
-                            value: vm.vasos,
-                            groupValue: vm.selectedCategory,
-                            onChanged: (value) {
-                              vm.change(vm.vasos);
-                            },
-                          ),
-                        ],
                       ),
                       TextFormField(
                         onChanged: (value) => product.name = value,
@@ -203,6 +172,37 @@ class _ProductForm extends StatelessWidget {
                         onChanged: vm.updateAvailability,
                       ),
                       const SizedBox(
+                        height: 10,
+                      ),
+                      ExpansionTile(
+                        title: const Text('categoría'),
+                        subtitle: Text(
+                          vm.selectedCategory,
+                          style: TextStyle(color: Colors.black26),
+                        ),
+                        children: [
+                          ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: vm.categoryList.length,
+                            itemBuilder: (context, index) {
+                              if (index == 0) {
+                                return SizedBox();
+                              } else {
+                                final categoria = vm.categoryList[index];
+                                return RadioListTile(
+                                  title: Text(categoria.name),
+                                  value: categoria.name,
+                                  groupValue: vm.selectedCategory,
+                                  onChanged: (value) {
+                                    vm.change(categoria.name);
+                                  },
+                                );
+                              }
+                            },
+                          )
+                        ],
+                      ),
+                      const SizedBox(
                         height: 30,
                       ),
                     ],
@@ -225,3 +225,44 @@ class _ProductForm extends StatelessWidget {
             )
           ]);
 }
+
+                              // RadioListTile(
+                              //   title: Text("vm.categoryList[index].name"),
+                              //   value: "vm.categoryList[index].name",
+                              //   groupValue: "vm.selectedCategory",
+                              //   onChanged: (value) {
+                              //     vm.change(vm.categoryList[index].name);
+                              //   },
+                              // );
+                          // RadioListTile(
+                          //   title: const Text('camping'),
+                          //   value: vm.camping,
+                          //   groupValue: vm.selectedCategory,
+                          //   onChanged: (value) {
+                          //     vm.change(vm.camping);
+                          //   },
+                          // ),
+                          // RadioListTile(
+                          //   title: const Text('cocina'),
+                          //   value: vm.cocina,
+                          //   groupValue: vm.selectedCategory,
+                          //   onChanged: (value) {
+                          //     vm.change(vm.cocina);
+                          //   },
+                          // ),
+                          // RadioListTile(
+                          //   title: const Text('varios'),
+                          //   value: vm.varios,
+                          //   groupValue: vm.selectedCategory,
+                          //   onChanged: (value) {
+                          //     vm.change(vm.varios);
+                          //   },
+                          // ),
+                          // RadioListTile(
+                          //   title: const Text('vasos'),
+                          //   value: vm.vasos,
+                          //   groupValue: vm.selectedCategory,
+                          //   onChanged: (value) {
+                          //     vm.change(vm.vasos);
+                          //   },
+                          // ),

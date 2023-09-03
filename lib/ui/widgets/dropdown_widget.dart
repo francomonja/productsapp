@@ -21,12 +21,12 @@ class _DropDownWidgetState extends State<DropDownWidget> {
   @override
   Widget build(BuildContext context) {
     return DropdownButton<Category>(
-      value: widget.categoriesList.firstWhere((element) => element.name == widget.selectedValue.name),
+      borderRadius: BorderRadius.circular(10),
+      value: widget.categoriesList
+          .firstWhere((element) => element.name == widget.selectedValue.name),
       icon: const Icon(Icons.arrow_downward),
-      style: const TextStyle(color: Colors.deepPurple),
       underline: Container(
         height: 2,
-        color: Colors.deepPurpleAccent,
       ),
       onChanged: (value) {
         widget.onChanged(value);
@@ -37,7 +37,11 @@ class _DropDownWidgetState extends State<DropDownWidget> {
       items: widget.categoriesList.map<DropdownMenuItem<Category>>((value) {
         return DropdownMenuItem(
           value: value,
-          child: Text(value.name),
+          child: Text(
+            value.name,
+            style: TextStyle(fontSize: 15),
+            overflow: TextOverflow.ellipsis,
+          ),
         );
       }).toList(),
     );

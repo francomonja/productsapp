@@ -3,11 +3,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:products_app/app.router.dart';
+import 'package:products_app/core/menu_items/menu_items.dart';
 import 'package:products_app/core/services/category_service.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../../app.locator.dart';
+import '../enums/dialog_type.dart';
 import '../models/category_model.dart';
 import '../models/product_model.dart';
 import '../services/products_service.dart';
@@ -17,12 +19,18 @@ class HomeViewViewModel extends BaseViewModel {
   final _navigationService = locator<NavigationService>();
   final productsService = locator<ProductsService>();
   final categoryService = locator<CategoryService>();
+
+  final CategoryService _categoryService = locator<CategoryService>();
+  final TextEditingController categoryController = TextEditingController();
   final String _baseUrl = 'productsapp-6ee2d-default-rtdb.firebaseio.com';
   List<Product> products = [];
   List<Product> productList = [];
   final storage = FlutterSecureStorage();
   bool isLoading = false;
   bool isSaving = false;
+  int navDrawerIndex = 0;
+
+  final DialogService _dialogService = locator<DialogService>();
 
   final TextEditingController search = TextEditingController();
 
@@ -74,6 +82,10 @@ class HomeViewViewModel extends BaseViewModel {
         categoryService: categoryService);
   }
 
+  void navigateToDeleteCategoryView() async {
+    await _navigationService.navigateToDeleteCategoryView();
+  }
+
   void onDelete(id) async {
     await productsService.onDelete(id);
     productList.removeWhere((element) => element.id == id);
@@ -87,8 +99,38 @@ class HomeViewViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  Future<void> deleteCategory(id) async {
-    await categoryService.onDelete(id);
+  void selectedOption(value) async {
+    final menuItem = appMenuItems[value];
+    navDrawerIndex = value;
     notifyListeners();
+    switch (menuItem.link) {
+      case 'product-view':
+        navigateToProductView();
+        productsService.selectedProduct = Product(
+          available: false,
+          name: '',
+          price: 0,
+          category: '',
+        );
+        break;
+      case 'category-view':
+        dialog();
+        break;
+      case 'delete-view':
+        navigateToDeleteCategoryView();
+        break;
+    }
+  }
+
+  void dialog() async {
+    var response = await _dialogService.showCustomDialog(
+      variant: DialogType.categoryForm,
+      title: 'Ingrese la categoría',
+    );
+    if (response!.confirmed) {
+      Category newCategory = response.data;
+      await _categoryService.createCategory(newCategory);
+      init();
+    }
   }
 }

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:products_app/ui/setup_dialog_ui.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import 'app.locator.dart';
@@ -11,7 +12,7 @@ void main() {
   runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
     await setupLocator();
-
+    setupDialogUi();
     // ProductsService productsService = locator<ProductsService>();
     // await productsService.loadProducts();
     String initialRoute = Routes.homeView;
