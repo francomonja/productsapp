@@ -77,11 +77,6 @@ class HomeViewViewModel extends BaseViewModel {
         productsService: productsService);
   }
 
-  void navigateToCategoryView() async {
-    await _navigationService.navigateToCategoryView(
-        categoryService: categoryService);
-  }
-
   void navigateToDeleteCategoryView() async {
     await _navigationService.navigateToDeleteCategoryView();
   }
