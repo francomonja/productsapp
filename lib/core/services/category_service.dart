@@ -29,6 +29,8 @@ class CategoryService {
       print('Error: $error');
     }
     listCategories = categoryList;
+    categoryList.sort((a, b) => a.name.compareTo(b.name));
+    listCategories.sort((a, b) => a.name.compareTo(b.name));
     return categoryList;
   }
 

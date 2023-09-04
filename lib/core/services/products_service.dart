@@ -30,6 +30,7 @@ class ProductsService {
     } catch (error) {
       print('Error: $error');
     }
+    tempProduct.sort((a, b) => a.name.compareTo(b.name));
     return tempProduct;
   }
 
@@ -72,9 +73,11 @@ class ProductsService {
   Future<String?> uploadImage() async {
     if (newPictureFile == null) return null;
 
-    final url = Uri.parse('https://api.cloudinary.com/v1_1/dgagjc77g/image/upload?upload_preset=puyyq9zb');
+    final url = Uri.parse(
+        'https://api.cloudinary.com/v1_1/dgagjc77g/image/upload?upload_preset=puyyq9zb');
     final imageUploadRequest = http.MultipartRequest('POST', url);
-    final file = await http.MultipartFile.fromPath('file', newPictureFile!.path);
+    final file =
+        await http.MultipartFile.fromPath('file', newPictureFile!.path);
     imageUploadRequest.files.add(file);
 
     final streamResponse = await imageUploadRequest.send();
