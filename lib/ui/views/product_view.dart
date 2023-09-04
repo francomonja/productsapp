@@ -5,6 +5,7 @@ import 'package:products_app/app.locator.dart';
 import 'package:products_app/core/providers/product_form_provider.dart';
 import 'package:products_app/core/services/products_service.dart';
 import 'package:products_app/core/viewmodels/product_view_viewmodel.dart';
+import 'package:products_app/ui/widgets/stock_control_widget.dart';
 import 'package:stacked/stacked.dart';
 
 import '../decorations/input_decoration.dart';
@@ -128,6 +129,7 @@ class _ProductForm extends StatelessWidget {
                         height: 10,
                       ),
                       TextFormField(
+                        maxLines: null,
                         onChanged: (value) => product.name = value,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -166,11 +168,24 @@ class _ProductForm extends StatelessWidget {
                       const SizedBox(
                         height: 30,
                       ),
-                      SwitchListTile.adaptive(
-                        title: const Text('Disponible'),
-                        value: product.available,
-                        onChanged: vm.updateAvailability,
+                      TextFormField(
+                        onChanged: (value) => product.description = value,
+                        maxLines: null,
+                        initialValue: product.description,
+                        decoration: InputDecorations.authInputDecoration(
+                          hintText: 'Descripción del producto',
+                          labelText: 'Descripción:',
+                        ),
                       ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      StockControlWidget(vm: vm),
+                      // SwitchListTile.adaptive(
+                      //   title: const Text('Disponible'),
+                      //   value: product.available,
+                      //   onChanged: vm.updateAvailability,
+                      // ),
                       const SizedBox(
                         height: 10,
                       ),
@@ -225,44 +240,3 @@ class _ProductForm extends StatelessWidget {
             )
           ]);
 }
-
-                              // RadioListTile(
-                              //   title: Text("vm.categoryList[index].name"),
-                              //   value: "vm.categoryList[index].name",
-                              //   groupValue: "vm.selectedCategory",
-                              //   onChanged: (value) {
-                              //     vm.change(vm.categoryList[index].name);
-                              //   },
-                              // );
-                          // RadioListTile(
-                          //   title: const Text('camping'),
-                          //   value: vm.camping,
-                          //   groupValue: vm.selectedCategory,
-                          //   onChanged: (value) {
-                          //     vm.change(vm.camping);
-                          //   },
-                          // ),
-                          // RadioListTile(
-                          //   title: const Text('cocina'),
-                          //   value: vm.cocina,
-                          //   groupValue: vm.selectedCategory,
-                          //   onChanged: (value) {
-                          //     vm.change(vm.cocina);
-                          //   },
-                          // ),
-                          // RadioListTile(
-                          //   title: const Text('varios'),
-                          //   value: vm.varios,
-                          //   groupValue: vm.selectedCategory,
-                          //   onChanged: (value) {
-                          //     vm.change(vm.varios);
-                          //   },
-                          // ),
-                          // RadioListTile(
-                          //   title: const Text('vasos'),
-                          //   value: vm.vasos,
-                          //   groupValue: vm.selectedCategory,
-                          //   onChanged: (value) {
-                          //     vm.change(vm.vasos);
-                          //   },
-                          // ),

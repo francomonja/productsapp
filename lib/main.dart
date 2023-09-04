@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:products_app/ui/setup_dialog_ui.dart';
 import 'package:stacked_services/stacked_services.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 import 'app.locator.dart';
 import 'app.router.dart';
@@ -16,7 +18,9 @@ void main() {
     // ProductsService productsService = locator<ProductsService>();
     // await productsService.loadProducts();
     String initialRoute = Routes.homeView;
-
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
     runApp(MyApp(initialRoute: initialRoute));
   }, (error, stack) {});
 }

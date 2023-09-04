@@ -7,8 +7,12 @@ class Product {
   double price;
   String? id;
   String category;
+  String? description;
+  int? stock;
 
   Product({
+    this.description,
+    this.stock,
     required this.available,
     required this.name,
     this.picture,
@@ -28,6 +32,8 @@ class Product {
         picture: json["picture"],
         price: json["price"].toDouble(),
         category: json["category"],
+        description: json["description"],
+        stock: json["stock"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -37,6 +43,8 @@ class Product {
         "picture": picture,
         "price": price,
         "category": category,
+        "description": description,
+        "stock": stock,
       };
 
   Product copy() => Product(
@@ -46,5 +54,7 @@ class Product {
         picture: picture,
         id: id,
         category: category,
+        description: description,
+        stock: stock,
       );
 }

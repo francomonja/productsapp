@@ -28,9 +28,15 @@ class CategoryService {
     } catch (error) {
       print('Error: $error');
     }
-    listCategories = categoryList;
     categoryList.sort((a, b) => a.name.compareTo(b.name));
-    listCategories.sort((a, b) => a.name.compareTo(b.name));
+    Category firstCategory = Category(name: 'Todas las categorias');
+    int index = categoryList
+        .indexWhere((category) => category.name == firstCategory.name);
+    if (index != -1) {
+      categoryList.removeAt(index);
+      categoryList.insert(0, firstCategory);
+    }
+    listCategories = categoryList;
     return categoryList;
   }
 

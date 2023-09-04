@@ -16,17 +16,19 @@ class ProductViewViewModel extends ChangeNotifier {
   final ProductsService productsService = locator<ProductsService>();
   final CategoryService categoryService = locator<CategoryService>();
   final NavigationService _navigationService = locator<NavigationService>();
+
+  TextEditingController stockController = TextEditingController();
   File? newPictureFile;
   List<Category> categoryList = [];
-  String camping = 'camping';
-  // String cocina = 'cocina';
-  // String vasos = 'vasos';
-  // String varios = 'varios';
   String selectedCategory = 'Todas las categorias';
-  int count = 1;
 
   Future<void> init() async {
     categoryList = await categoryService.loadCategory();
+    stockController.text = (productsService.selectedProduct!.stock != null)
+        ? productsService.selectedProduct!.stock.toString()
+        : '0';
+    productsService.selectedProduct!.stock = int.parse(stockController.text);
+    selectedCategory = (productsService.selectedProduct!.category);
     notifyListeners();
   }
 
@@ -53,7 +55,34 @@ class ProductViewViewModel extends ChangeNotifier {
   }
 
   Future saveOrCreateProduct(Product product) async {
+    if (productsService.selectedProduct!.stock == 0) {
+      productsService.selectedProduct!.available = false;
+    } else {
+      productsService.selectedProduct!.available = true;
+    }
     await productsService.saveOrCreateProduct(product);
     await _navigationService.pushNamedAndRemoveUntil(Routes.homeView);
+  }
+
+  void decrementStock() {
+    if (productsService.selectedProduct!.stock! > 0) {
+      productsService.selectedProduct!.stock =
+          productsService.selectedProduct!.stock! - 1;
+      stockController.text = productsService.selectedProduct!.stock.toString();
+      notifyListeners();
+    }
+  }
+
+  void clearStock() {
+    productsService.selectedProduct!.stock = 0;
+    stockController.text = productsService.selectedProduct!.stock.toString();
+    notifyListeners();
+  }
+
+  void incrementStock() {
+    productsService.selectedProduct!.stock =
+        productsService.selectedProduct!.stock! + 1;
+    stockController.text = productsService.selectedProduct!.stock.toString();
+    notifyListeners();
   }
 }

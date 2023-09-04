@@ -6,14 +6,17 @@ class CustomInput extends StatelessWidget {
     required this.controller,
     required this.label,
     this.isPassword = false,
+    this.keyboardType,
   }) : super(key: key);
 
   final TextEditingController controller;
+  final TextInputType? keyboardType;
   final bool isPassword;
   final String label;
   @override
   Widget build(BuildContext context) {
     return TextField(
+      keyboardType: keyboardType,
       controller: controller,
       obscureText: isPassword,
       decoration: InputDecoration(

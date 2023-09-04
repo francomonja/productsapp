@@ -5,14 +5,15 @@
 // **************************************************************************
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
+import 'package:flutter/foundation.dart' as _i6;
 import 'package:flutter/material.dart' as _i5;
 import 'package:flutter/material.dart';
-import 'package:products_app/core/services/products_service.dart' as _i6;
+import 'package:products_app/core/services/products_service.dart' as _i7;
 import 'package:products_app/ui/views/delete_category_view.dart' as _i4;
 import 'package:products_app/ui/views/home_view.dart' as _i2;
 import 'package:products_app/ui/views/product_view.dart' as _i3;
 import 'package:stacked/stacked.dart' as _i1;
-import 'package:stacked_services/stacked_services.dart' as _i7;
+import 'package:stacked_services/stacked_services.dart' as _i8;
 
 class Routes {
   static const homeView = '/home-view';
@@ -79,9 +80,9 @@ class ProductViewArguments {
     required this.productsService,
   });
 
-  final _i5.Key? key;
+  final _i6.Key? key;
 
-  final _i6.ProductsService productsService;
+  final _i7.ProductsService productsService;
 
   @override
   String toString() {
@@ -100,7 +101,7 @@ class ProductViewArguments {
   }
 }
 
-extension NavigatorStateExtension on _i7.NavigationService {
+extension NavigatorStateExtension on _i8.NavigationService {
   Future<dynamic> navigateToHomeView([
     int? routerId,
     bool preventDuplicates = true,
@@ -116,8 +117,8 @@ extension NavigatorStateExtension on _i7.NavigationService {
   }
 
   Future<dynamic> navigateToProductView({
-    _i5.Key? key,
-    required _i6.ProductsService productsService,
+    _i6.Key? key,
+    required _i7.ProductsService productsService,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -162,8 +163,8 @@ extension NavigatorStateExtension on _i7.NavigationService {
   }
 
   Future<dynamic> replaceWithProductView({
-    _i5.Key? key,
-    required _i6.ProductsService productsService,
+    _i6.Key? key,
+    required _i7.ProductsService productsService,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,

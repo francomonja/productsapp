@@ -1,4 +1,5 @@
 import 'package:products_app/ui/widgets/dialogs/category_form_dialog_widget.dart';
+import 'package:products_app/ui/widgets/dialogs/login_form_dialog_widget.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../app.locator.dart';
@@ -10,6 +11,11 @@ void setupDialogUi() {
   final builders = {
     DialogType.categoryForm: (context, request, completer) =>
         CategoryFormDialogWidget(
+          request: request,
+          completer: completer,
+        ),
+    DialogType.loginForm: (context, request, completer) =>
+        LoginFormDialogWidget(
           request: request,
           completer: completer,
         ),

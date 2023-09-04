@@ -36,17 +36,19 @@ class HomeView extends StatelessWidget {
                             ProductCard(
                               product: vm.productList[index],
                             ),
-                            Positioned(
-                                bottom: 15,
-                                right: 20,
-                                child: IconButton(
-                                    onPressed: () {
-                                      vm.onDelete(vm.productList[index].id);
-                                    },
-                                    icon: const Icon(
-                                      Icons.delete_forever,
-                                      color: Colors.white,
-                                    )))
+                            vm.isAuth
+                                ? Positioned(
+                                    bottom: 15,
+                                    right: 20,
+                                    child: IconButton(
+                                        onPressed: () {
+                                          vm.onDelete(vm.productList[index].id);
+                                        },
+                                        icon: const Icon(
+                                          Icons.delete_forever,
+                                          color: Colors.white,
+                                        )))
+                                : const SizedBox()
                           ]))),
         );
       },

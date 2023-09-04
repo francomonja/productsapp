@@ -29,12 +29,11 @@ class ProductCard extends StatelessWidget {
             ),
 
             //TODO mostrar de manera condicional
-            if (!product.available)
-              const Positioned(
-                top: 0,
-                left: 0,
-                child: _NotAvailable(),
-              ),
+            Positioned(
+              top: 0,
+              left: 0,
+              child: _NotAvailable(productStock: product.stock),
+            )
           ],
         ),
       ),
@@ -54,8 +53,10 @@ BoxDecoration _cardBorders() => BoxDecoration(
         ]);
 
 class _NotAvailable extends StatelessWidget {
+  final productStock;
   const _NotAvailable({
     super.key,
+    this.productStock,
   });
 
   @override
@@ -67,15 +68,19 @@ class _NotAvailable extends StatelessWidget {
           color: Colors.yellow[800],
           borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(25), bottomRight: Radius.circular(25))),
-      child: const FittedBox(
+      child: FittedBox(
         fit: BoxFit.contain,
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10),
-          child: Text(
-            'No Disponible',
-            style: TextStyle(color: Colors.white, fontSize: 20),
-          ),
-        ),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: (productStock == 0)
+                ? const Text(
+                    'No disponible',
+                    style: TextStyle(color: Colors.white, fontSize: 20),
+                  )
+                : Text(
+                    'Stock: ${productStock.toString()}',
+                    style: const TextStyle(color: Colors.white, fontSize: 8),
+                  )),
       ),
     );
   }

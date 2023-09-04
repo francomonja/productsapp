@@ -1,16 +1,20 @@
 import 'dart:convert';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:products_app/app.router.dart';
 import 'package:products_app/core/menu_items/menu_items.dart';
+import 'package:products_app/core/services/auth_service.dart';
 import 'package:products_app/core/services/category_service.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../../app.locator.dart';
+import '../constants/storage_keys.dart';
 import '../enums/dialog_type.dart';
 import '../models/category_model.dart';
+import '../models/login_model.dart';
 import '../models/product_model.dart';
 import '../services/products_service.dart';
 import 'package:http/http.dart' as http;
@@ -19,6 +23,9 @@ class HomeViewViewModel extends BaseViewModel {
   final _navigationService = locator<NavigationService>();
   final productsService = locator<ProductsService>();
   final categoryService = locator<CategoryService>();
+  final AuthService _authService = locator<AuthService>();
+
+  final FlutterSecureStorage _secureStorage = locator<FlutterSecureStorage>();
 
   final CategoryService _categoryService = locator<CategoryService>();
   final TextEditingController categoryController = TextEditingController();
@@ -29,6 +36,7 @@ class HomeViewViewModel extends BaseViewModel {
   bool isLoading = false;
   bool isSaving = false;
   int navDrawerIndex = 0;
+  bool isAuth = false;
 
   final DialogService _dialogService = locator<DialogService>();
 
@@ -36,7 +44,6 @@ class HomeViewViewModel extends BaseViewModel {
 
   Category selectedCategory = Category(name: 'Todas las categorias');
   List<Category> categoryList = [];
-
   findByCategory() async {
     if (selectedCategory.name == 'Todas las categorias') {
       productList = products;
@@ -127,5 +134,46 @@ class HomeViewViewModel extends BaseViewModel {
       await _categoryService.createCategory(newCategory);
       init();
     }
+  }
+
+  void loginDialog(context) async {
+    var response = await _dialogService.showCustomDialog(
+      variant: DialogType.loginForm,
+      title: 'Inicie sesión',
+    );
+    if (response!.confirmed) {
+      Login login = response.data;
+      try {
+        await _authService.onLogIn(login.user, login.password);
+        if (await _authService.isAuthenticated()) {
+          isAuth = true;
+          Navigator.pop(context);
+          showCustomSnackbar(context, 'Sesión iniciada');
+          notifyListeners();
+        }
+      } catch (e) {
+        Navigator.pop(context);
+        print(e);
+        showCustomSnackbar(context, e.toString());
+      }
+    }
+  }
+
+  void logOut() async {
+    await FirebaseAuth.instance.signOut();
+    await _secureStorage.delete(key: userToken);
+    isAuth = false;
+    notifyListeners();
+  }
+
+  void showCustomSnackbar(BuildContext context, e) {
+    ScaffoldMessenger.of(context).clearSnackBars();
+
+    final snackbar = SnackBar(
+      content: Text(e),
+      duration: const Duration(seconds: 3),
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
   }
 }

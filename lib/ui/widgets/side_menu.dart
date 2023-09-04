@@ -24,19 +24,32 @@ class SideMenu extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 30),
           child: Column(
             children: [
-              const Text('Buscador'),
-              Column(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  SearchWidget(
-                    controller: vm.search,
-                    onChanged: vm.findByCategory,
-                  ),
-                  DropDownWidget(
-                    selectedValue: vm.selectedCategory,
-                    onChanged: vm.onChangeCategory,
-                    categoriesList: vm.categoryList,
-                  ),
+                  const Text('Buscador'),
+                  vm.isAuth
+                      ? TextButton(
+                          onPressed: () => vm.logOut(),
+                          child: const Text('cerrar sesión'))
+                      : TextButton(
+                          onPressed: () {
+                            vm.loginDialog(context);
+                          },
+                          child: const Text('iniciar sesión'))
                 ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              SearchWidget(
+                controller: vm.search,
+                onChanged: vm.findByCategory,
+              ),
+              DropDownWidget(
+                selectedValue: vm.selectedCategory,
+                onChanged: vm.onChangeCategory,
+                categoriesList: vm.categoryList,
               ),
             ],
           ),
@@ -45,16 +58,20 @@ class SideMenu extends StatelessWidget {
           padding: EdgeInsets.symmetric(vertical: 10),
           child: Divider(),
         ),
-        const Padding(
-          padding: EdgeInsets.fromLTRB(28, 10, 16, 10),
-          child: Text('Mas opciones'),
-        ),
-        ...appMenuItems.map(
-          (item) => NavigationDrawerDestination(
-            icon: Icon(item.icon),
-            label: Text(item.title),
-          ),
-        ),
+        vm.isAuth
+            ? const Padding(
+                padding: EdgeInsets.fromLTRB(28, 10, 16, 10),
+                child: Text('Mas opciones'),
+              )
+            : const SizedBox(
+                height: 1,
+              ),
+        ...appMenuItems.map((item) => vm.isAuth
+            ? NavigationDrawerDestination(
+                icon: Icon(item.icon),
+                label: Text(item.title),
+              )
+            : const SizedBox())
       ],
     );
   }
