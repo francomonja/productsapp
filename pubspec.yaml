@@ -43,6 +43,7 @@ dependencies:
   uuid: ^4.0.0
   firebase_auth: ^4.9.0
   firebase_core: ^2.15.1
+  photo_view: ^0.14.0
 
 dev_dependencies:
   build_runner: null

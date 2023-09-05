@@ -1,10 +1,11 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:photo_view/photo_view.dart';
 
 class ProductImage extends StatelessWidget {
   final String? url;
-  const ProductImage({super.key, this.url});
+  ProductImage({super.key, this.url});
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +27,7 @@ class ProductImage extends StatelessWidget {
     );
   }
 
+  final PhotoViewController _controller = PhotoViewController();
   BoxDecoration _buildBoxDecoration() => BoxDecoration(
           color: Colors.black,
           borderRadius: const BorderRadius.only(
@@ -45,13 +47,28 @@ class ProductImage extends StatelessWidget {
       );
     }
     if (picture.startsWith('http')) {
-      return FadeInImage(
-        image: NetworkImage(url!),
-        placeholder: const AssetImage('assets/jar-loading.gif'),
-        fit: BoxFit.cover,
+      return PhotoView(
+        imageProvider: NetworkImage(url!),
+        minScale: PhotoViewComputedScale.contained,
+        initialScale: PhotoViewComputedScale.contained,
+        onTapUp: (context, details, controllerValue) {
+          if (_controller.scale != 1.0) {
+            _controller.reset(); // Vuelve a la página inicial (tamaño original)
+          }
+        },
+        onTapDown: (context, details, controllerValue) {
+          if (_controller.scale != 1.0) {
+            _controller.reset(); // Vuelve a la página inicial (tamaño original)
+          }
+        },
       );
     }
 
+// FadeInImage(
+//           image: NetworkImage(url!),
+//           placeholder: const AssetImage('assets/jar-loading.gif'),
+//           fit: BoxFit.cover,
+//         ),
     return Image.file(
       File(picture),
       fit: BoxFit.cover,

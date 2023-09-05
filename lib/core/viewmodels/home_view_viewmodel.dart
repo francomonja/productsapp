@@ -67,6 +67,7 @@ class HomeViewViewModel extends BaseViewModel {
     categoryList = await categoryService.loadCategory();
     products = await productsService.loadProducts();
     productList = products;
+    isAuth = await _authService.isAuthenticated();
 
     notifyListeners();
   }
