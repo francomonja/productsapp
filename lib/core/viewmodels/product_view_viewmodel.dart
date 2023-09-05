@@ -5,6 +5,7 @@ import 'package:products_app/app.router.dart';
 import 'package:products_app/core/models/category_model.dart';
 import 'package:products_app/core/services/category_service.dart';
 import 'package:products_app/core/services/products_service.dart';
+import 'package:products_app/ui/widgets/product_image.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../../app.locator.dart';
@@ -21,6 +22,7 @@ class ProductViewViewModel extends ChangeNotifier {
   File? newPictureFile;
   List<Category> categoryList = [];
   String selectedCategory = 'Todas las categorias';
+  late int currentIndex;
 
   Future<void> init() async {
     categoryList = await categoryService.loadCategory();
@@ -45,11 +47,11 @@ class ProductViewViewModel extends ChangeNotifier {
   }
 
   void updateSelectedProductImage(String path) {
-    productsService.updateSelectedProductImage(path);
+    productsService.updateSelectedProductImage(path, currentIndex);
     notifyListeners();
   }
 
-  Future<String?> uploadImage() async {
+  Future<String?> uploadImage(int index) async {
     await productsService.uploadImage();
     return null;
   }
@@ -84,5 +86,36 @@ class ProductViewViewModel extends ChangeNotifier {
         productsService.selectedProduct!.stock! + 1;
     stockController.text = productsService.selectedProduct!.stock.toString();
     notifyListeners();
+  }
+
+  showImage(index, product) {
+    var image;
+    switch (index) {
+      case 0:
+        image = ProductImage().getImage(product.picture);
+        currentIndex = 0;
+        print(currentIndex);
+        // product.picture != null
+        //     ? image = NetworkImage(product.picture)
+        //     : image = const AssetImage('assets/no-image.png');
+        break;
+      case 1:
+        currentIndex = 1;
+        image = ProductImage().getImage(product.picture2);
+        print(currentIndex);
+        // product.picture2 != null
+        //     ? image = NetworkImage(product.picture2)
+        //     : image = const AssetImage('assets/no-image.png');
+        break;
+      case 2:
+        currentIndex = 2;
+        image = ProductImage().getImage(product.picture3);
+        print(currentIndex);
+        // product.picture3 != null
+        //     ? image = NetworkImage(product.picture3)
+        //     : image = const AssetImage('assets/no-image.png');
+        break;
+    }
+    return image;
   }
 }

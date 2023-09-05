@@ -48,7 +48,7 @@ class ProductImage extends StatelessWidget {
     }
     if (picture.startsWith('http')) {
       return PhotoView(
-        imageProvider: NetworkImage(url!),
+        imageProvider: NetworkImage(picture),
         minScale: PhotoViewComputedScale.contained,
         initialScale: PhotoViewComputedScale.contained,
         onTapUp: (context, details, controllerValue) {

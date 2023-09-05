@@ -65,7 +65,21 @@ class ProductsService {
     return product.id!;
   }
 
-  void updateSelectedProductImage(String path) {
+  void updateSelectedProductImage(String path, int currentIndex) {
+    switch (currentIndex) {
+      case 0:
+        selectedProduct!.picture = path;
+        newPictureFile = File.fromUri(Uri(path: path));
+        break;
+      case 1:
+        selectedProduct!.picture2 = path;
+        newPictureFile = File.fromUri(Uri(path: path));
+        break;
+      case 2:
+        selectedProduct!.picture3 = path;
+        newPictureFile = File.fromUri(Uri(path: path));
+        break;
+    }
     selectedProduct!.picture = path;
     newPictureFile = File.fromUri(Uri(path: path));
   }

@@ -9,7 +9,7 @@ import 'package:products_app/ui/widgets/stock_control_widget.dart';
 import 'package:stacked/stacked.dart';
 
 import '../decorations/input_decoration.dart';
-import '../widgets/product_image.dart';
+import '../widgets/picture_swiper_widget.dart';
 
 class ProductView extends StatelessWidget {
   final ProductsService productsService;
@@ -31,7 +31,11 @@ class ProductView extends StatelessWidget {
               children: [
                 Stack(
                   children: [
-                    ProductImage(url: productsService.selectedProduct?.picture),
+                    PictureSwiperWidget(
+                      product: productsService.selectedProduct!,
+                      vm: vm,
+                    ),
+                    // ProductImage(url: productsService.selectedProduct?.picture),
                     Positioned(
                         top: 60,
                         left: 20,
@@ -49,7 +53,7 @@ class ProductView extends StatelessWidget {
                             onPressed: () async {
                               final picker = ImagePicker();
                               final XFile? pickedFile = await picker.pickImage(
-                                  source: ImageSource.gallery,
+                                  source: ImageSource.camera,
                                   imageQuality: 100);
 
                               if (pickedFile == null) {
