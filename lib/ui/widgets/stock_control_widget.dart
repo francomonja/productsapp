@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../core/providers/product_form_provider.dart';
 import '../../core/viewmodels/product_view_viewmodel.dart';
 
 class StockControlWidget extends StatelessWidget {
@@ -9,8 +8,6 @@ class StockControlWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final productForm =
-        ProductFormProvider(vm.productsService.selectedProduct!);
     var size = MediaQuery.of(context).size;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
