@@ -1,3 +1,4 @@
+import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -29,40 +30,56 @@ class ProductView extends StatelessWidget {
             // keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             child: Column(
               children: [
-                Stack(
-                  children: [
-                    ProductImage(url: productsService.selectedProduct?.picture),
-                    Positioned(
-                        top: 60,
-                        left: 20,
-                        child: IconButton(
-                            onPressed: () => Navigator.of(context).pop(),
-                            icon: const Icon(
-                              Icons.arrow_back_ios_new,
-                              size: 40,
-                              color: Colors.white,
-                            ))),
-                    Positioned(
-                        top: 60,
-                        right: 20,
-                        child: IconButton(
-                            onPressed: () async {
-                              final picker = ImagePicker();
-                              final XFile? pickedFile = await picker.pickImage(
-                                  source: ImageSource.gallery,
-                                  imageQuality: 100);
+                SizedBox(
+                  height: 450,
+                  child: Swiper(
+                    itemCount: 5,
+                    itemBuilder: (context, index) {
+                      return Stack(
+                        children: [
+                          ProductImage(
+                              url: productsService
+                                  .selectedProduct!.picture!['picture$index']),
+                          Positioned(
+                              top: 60,
+                              left: 20,
+                              child: IconButton(
+                                  onPressed: () => Navigator.of(context).pop(),
+                                  icon: const Icon(
+                                    Icons.arrow_back_ios_new,
+                                    size: 40,
+                                    color: Colors.white,
+                                  ))),
+                          Positioned(
+                              top: 400,
+                              left: 200,
+                              child: Text(index.toString())),
+                          Positioned(
+                              top: 60,
+                              right: 20,
+                              child: IconButton(
+                                  onPressed: () async {
+                                    final picker = ImagePicker();
+                                    final XFile? pickedFile =
+                                        await picker.pickImage(
+                                            source: ImageSource.camera,
+                                            imageQuality: 100);
 
-                              if (pickedFile == null) {
-                                return;
-                              }
-                              vm.updateSelectedProductImage(pickedFile.path);
-                            },
-                            icon: const Icon(
-                              Icons.camera_alt_outlined,
-                              size: 40,
-                              color: Colors.white,
-                            ))),
-                  ],
+                                    if (pickedFile == null) {
+                                      return;
+                                    }
+                                    vm.updateSelectedProductImage(
+                                        pickedFile.path, index);
+                                  },
+                                  icon: const Icon(
+                                    Icons.camera_alt_outlined,
+                                    size: 40,
+                                    color: Colors.white,
+                                  ))),
+                        ],
+                      );
+                    },
+                  ),
                 ),
                 const _ProductForm(),
                 const SizedBox(
@@ -71,17 +88,24 @@ class ProductView extends StatelessWidget {
               ],
             ),
           ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
           floatingActionButton: FloatingActionButton(
               onPressed: productsService.isSaving
                   ? null
                   : () async {
                       if (productForm.isValidForm()) return;
-                      final String? imageUrl =
+                      final List<String?>? imageUrl =
                           await productsService.uploadImage();
+                      final Map<String, dynamic> picture =
+                          productForm.product.picture ?? {};
 
                       if (imageUrl != null) {
-                        productForm.product.picture = imageUrl;
+                        for (int i = 0; i < imageUrl.length; i++) {
+                          picture['picture$i'] = imageUrl[i];
+                        }
+                        productForm.product.picture = picture;
+                      } else {
+                        picture['picture0'] =
+                            "https://res.cloudinary.com/dgagjc77g/image/upload/v1694473012/imagen-no-disponible_advark.jpg";
                       }
 
                       await vm.saveOrCreateProduct(productForm.product);

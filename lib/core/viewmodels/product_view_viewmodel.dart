@@ -44,8 +44,8 @@ class ProductViewViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void updateSelectedProductImage(String path) {
-    productsService.updateSelectedProductImage(path);
+  void updateSelectedProductImage(String path, i) {
+    productsService.updateSelectedProductImage(path, i);
     notifyListeners();
   }
 

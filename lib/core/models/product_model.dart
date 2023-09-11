@@ -3,7 +3,7 @@ import 'dart:convert';
 class Product {
   bool available;
   String name;
-  String? picture;
+  Map<String, dynamic>? picture;
   double price;
   String? id;
   String category;
@@ -21,15 +21,19 @@ class Product {
     required this.category,
   });
 
-  factory Product.fromRawJson(String str) => Product.fromJson(json.decode(str));
+  factory Product.fromRawJson(String str) =>
+      Product.fromJson(json.decode(str), picture: []);
 
   String toRawJson() => json.encode(toJson());
 
-  factory Product.fromJson(Map<String, dynamic> json) => Product(
+  factory Product.fromJson(Map<String, dynamic> json,
+          {required List<String> picture}) =>
+      Product(
         available: json["available"],
         name: json["name"],
         id: json["id"],
-        picture: json["picture"],
+        picture:
+            Map<String, dynamic>.from(json["picture"] as Map<String, dynamic>),
         price: json["price"].toDouble(),
         category: json["category"],
         description: json["description"],

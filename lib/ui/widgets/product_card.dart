@@ -18,7 +18,7 @@ class ProductCard extends StatelessWidget {
         child: Stack(
           alignment: Alignment.bottomLeft,
           children: [
-            _BackgroundImage(url: product.picture),
+            _BackgroundImage(url: product.picture!['picture0']),
             _ProductDetails(
               product: product,
             ),

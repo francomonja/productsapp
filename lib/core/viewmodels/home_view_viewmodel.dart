@@ -76,7 +76,7 @@ class HomeViewViewModel extends BaseViewModel {
     final url = Uri.https(_baseUrl, 'products/${id}.json');
     final resp = await http.get(url);
     Map<String, dynamic> jsonMap = json.decode(resp.body);
-    productsService.selectedProduct = Product.fromJson(jsonMap);
+    productsService.selectedProduct = Product.fromJson(jsonMap, picture: []);
     navigateToProductView();
   }
 
@@ -114,6 +114,7 @@ class HomeViewViewModel extends BaseViewModel {
           name: '',
           price: 0,
           category: '',
+          picture: {},
         );
         break;
       case 'category-view':
@@ -147,10 +148,9 @@ class HomeViewViewModel extends BaseViewModel {
       try {
         await _authService.onLogIn(login.user, login.password);
         if (await _authService.isAuthenticated()) {
-          isAuth = true;
+          init();
           Navigator.pop(context);
           showCustomSnackbar(context, 'Sesión iniciada');
-          notifyListeners();
         }
       } catch (e) {
         Navigator.pop(context);

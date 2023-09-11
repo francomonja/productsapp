@@ -44,6 +44,9 @@ dependencies:
   firebase_auth: ^4.9.0
   firebase_core: ^2.15.1
   photo_view: ^0.14.0
+  card_swiper: ^3.0.1
+  firebase_storage: ^11.2.6
+  firebase_database: ^10.2.5
 
 dev_dependencies:
   build_runner: null
