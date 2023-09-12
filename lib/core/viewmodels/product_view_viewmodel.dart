@@ -18,15 +18,21 @@ class ProductViewViewModel extends ChangeNotifier {
   final NavigationService _navigationService = locator<NavigationService>();
 
   TextEditingController stockController = TextEditingController();
+  TextEditingController stockRosarioController = TextEditingController();
   File? newPictureFile;
   List<Category> categoryList = [];
   String selectedCategory = 'Todas las categorias';
+  bool isSaving = false;
 
   Future<void> init() async {
     categoryList = await categoryService.loadCategory();
     stockController.text = (productsService.selectedProduct!.stock != null)
         ? productsService.selectedProduct!.stock.toString()
         : '0';
+    stockRosarioController.text =
+        (productsService.selectedProduct!.stockRosario != null)
+            ? productsService.selectedProduct!.stock.toString()
+            : '0';
     productsService.selectedProduct!.stock = int.parse(stockController.text);
     selectedCategory = (productsService.selectedProduct!.category);
     notifyListeners();
@@ -55,34 +61,64 @@ class ProductViewViewModel extends ChangeNotifier {
   }
 
   Future saveOrCreateProduct(Product product) async {
+    isSaving = true;
+    notifyListeners();
     if (productsService.selectedProduct!.stock == 0) {
       productsService.selectedProduct!.available = false;
     } else {
       productsService.selectedProduct!.available = true;
     }
     await productsService.saveOrCreateProduct(product);
+    isSaving = false;
+    notifyListeners();
     await _navigationService.pushNamedAndRemoveUntil(Routes.homeView);
   }
 
-  void decrementStock() {
-    if (productsService.selectedProduct!.stock! > 0) {
-      productsService.selectedProduct!.stock =
-          productsService.selectedProduct!.stock! - 1;
+  void decrementStock(name) {
+    if (name == 'Stock Oberá') {
+      if (productsService.selectedProduct!.stock! > 0) {
+        productsService.selectedProduct!.stock =
+            productsService.selectedProduct!.stock! - 1;
+        stockController.text =
+            productsService.selectedProduct!.stock.toString();
+        notifyListeners();
+      }
+    } else if (name == 'Stock Rosario') {
+      if (productsService.selectedProduct!.stockRosario! > 0) {
+        productsService.selectedProduct!.stockRosario =
+            productsService.selectedProduct!.stockRosario! - 1;
+        stockRosarioController.text =
+            productsService.selectedProduct!.stockRosario.toString();
+        notifyListeners();
+      }
+    }
+  }
+
+  void clearStock(name) {
+    if (name == 'Stock Oberá') {
+      productsService.selectedProduct!.stock = 0;
       stockController.text = productsService.selectedProduct!.stock.toString();
+      notifyListeners();
+    } else if (name == 'Stock Rosario') {
+      productsService.selectedProduct!.stockRosario = 0;
+      stockRosarioController.text =
+          productsService.selectedProduct!.stockRosario.toString();
       notifyListeners();
     }
   }
 
-  void clearStock() {
-    productsService.selectedProduct!.stock = 0;
-    stockController.text = productsService.selectedProduct!.stock.toString();
-    notifyListeners();
-  }
-
-  void incrementStock() {
-    productsService.selectedProduct!.stock =
-        productsService.selectedProduct!.stock! + 1;
-    stockController.text = productsService.selectedProduct!.stock.toString();
-    notifyListeners();
+  void incrementStock(name) {
+    if (name == 'Stock Oberá') {
+      productsService.selectedProduct!.stock =
+          productsService.selectedProduct!.stock! + 1;
+      stockController.text = productsService.selectedProduct!.stock.toString();
+      notifyListeners();
+    } else if (name == 'Stock Rosario') {
+      productsService.selectedProduct!.stockRosario =
+          productsService.selectedProduct!.stockRosario! + 1;
+      stockRosarioController.text =
+          productsService.selectedProduct!.stockRosario.toString();
+      notifyListeners();
+    }
   }
 }

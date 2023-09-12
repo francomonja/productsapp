@@ -9,10 +9,12 @@ class Product {
   String category;
   String? description;
   int? stock;
+  int? stockRosario;
 
   Product({
     this.description,
     this.stock,
+    this.stockRosario,
     required this.available,
     required this.name,
     this.picture,
@@ -38,6 +40,7 @@ class Product {
         category: json["category"],
         description: json["description"],
         stock: json["stock"],
+        stockRosario: json["stockRosario"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -49,6 +52,7 @@ class Product {
         "category": category,
         "description": description,
         "stock": stock,
+        "stockRosario": stockRosario,
       };
 
   Product copy() => Product(
@@ -60,5 +64,6 @@ class Product {
         category: category,
         description: description,
         stock: stock,
+        stockRosario: stockRosario,
       );
 }

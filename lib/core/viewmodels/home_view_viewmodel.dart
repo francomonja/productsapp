@@ -77,11 +77,16 @@ class HomeViewViewModel extends BaseViewModel {
     final resp = await http.get(url);
     Map<String, dynamic> jsonMap = json.decode(resp.body);
     productsService.selectedProduct = Product.fromJson(jsonMap, picture: []);
-    navigateToProductView();
+    isAuth ? navigateToProductView() : navigateToProductDescriptionView();
   }
 
   void navigateToProductView() async {
     await _navigationService.navigateToProductView(
+        productsService: productsService);
+  }
+
+  void navigateToProductDescriptionView() async {
+    await _navigationService.navigateToProductDescriptionView(
         productsService: productsService);
   }
 

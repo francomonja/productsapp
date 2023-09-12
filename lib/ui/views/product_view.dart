@@ -33,7 +33,9 @@ class ProductView extends StatelessWidget {
                 SizedBox(
                   height: 450,
                   child: Swiper(
-                    itemCount: 5,
+                    pagination: const SwiperPagination(),
+                    itemCount:
+                        productsService.selectedProduct!.picture!.length + 1,
                     itemBuilder: (context, index) {
                       return Stack(
                         children: [
@@ -51,10 +53,6 @@ class ProductView extends StatelessWidget {
                                     color: Colors.white,
                                   ))),
                           Positioned(
-                              top: 400,
-                              left: 200,
-                              child: Text(index.toString())),
-                          Positioned(
                               top: 60,
                               right: 20,
                               child: IconButton(
@@ -62,7 +60,7 @@ class ProductView extends StatelessWidget {
                                     final picker = ImagePicker();
                                     final XFile? pickedFile =
                                         await picker.pickImage(
-                                            source: ImageSource.camera,
+                                            source: ImageSource.gallery,
                                             imageQuality: 100);
 
                                     if (pickedFile == null) {
@@ -103,7 +101,8 @@ class ProductView extends StatelessWidget {
                           picture['picture$i'] = imageUrl[i];
                         }
                         productForm.product.picture = picture;
-                      } else {
+                      } else if (vm
+                          .productsService.selectedProduct!.picture!.isEmpty) {
                         picture['picture0'] =
                             "https://res.cloudinary.com/dgagjc77g/image/upload/v1694473012/imagen-no-disponible_advark.jpg";
                       }
@@ -111,7 +110,7 @@ class ProductView extends StatelessWidget {
                       await vm.saveOrCreateProduct(productForm.product);
                       Navigator.of(context).pop();
                     },
-              child: vm.productsService.isSaving
+              child: vm.isSaving
                   ? const CircularProgressIndicator(
                       color: Colors.white,
                     )
@@ -204,7 +203,14 @@ class _ProductForm extends StatelessWidget {
                       const SizedBox(
                         height: 30,
                       ),
-                      StockControlWidget(vm: vm),
+                      StockControlWidget(
+                          vm: vm,
+                          stockController: vm.stockController,
+                          name: 'Stock Oberá'),
+                      StockControlWidget(
+                          vm: vm,
+                          stockController: vm.stockRosarioController,
+                          name: 'Stock Rosario'),
                       // SwitchListTile.adaptive(
                       //   title: const Text('Disponible'),
                       //   value: product.available,
