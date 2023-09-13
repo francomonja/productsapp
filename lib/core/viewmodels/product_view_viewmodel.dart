@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:products_app/core/models/category_model.dart';
 import 'package:products_app/core/services/category_service.dart';
 import 'package:products_app/core/services/products_service.dart';
 import 'package:stacked_services/stacked_services.dart';
+import 'package:http/http.dart' as http;
 
 import '../../app.locator.dart';
 import '../models/product_model.dart';
@@ -13,6 +15,7 @@ import '../models/product_model.dart';
 // enum Categoria { camping, cocina, vasos, varios }
 
 class ProductViewViewModel extends ChangeNotifier {
+  // final String _baseUrl = 'productsapp-6ee2d-default-rtdb.firebaseio.com';
   final ProductsService productsService = locator<ProductsService>();
   final CategoryService categoryService = locator<CategoryService>();
   final NavigationService _navigationService = locator<NavigationService>();
@@ -118,6 +121,56 @@ class ProductViewViewModel extends ChangeNotifier {
           productsService.selectedProduct!.stockRosario! + 1;
       stockRosarioController.text =
           productsService.selectedProduct!.stockRosario.toString();
+      notifyListeners();
+    }
+  }
+
+  orderList(Map<String, dynamic> picture, index) {
+    // String deleteWord = 'picture';
+    Map<String, dynamic> updatedMap = {};
+    // String firstKey = picture.keys.first;
+    // firstKey = firstKey.replaceAll(deleteWord, '');
+    // int first = int.parse(firstKey);
+    if (index > 0) {
+      for (var i = 0; i < index; i++) {
+        updatedMap['picture$i'] = picture['picture$i'];
+      }
+    }
+    for (var i = index; i < picture.length; i++) {
+      if (index == 0) {
+        index = 1;
+      }
+      updatedMap['picture$i'] = picture['picture${index + i}'];
+    }
+    picture = updatedMap;
+    return picture;
+  }
+
+  Future<void> deleteImage(Product product, index) async {
+    try {
+      isSaving = true;
+      notifyListeners();
+      product.picture!
+          .removeWhere((key, value) => key.endsWith(index.toString()));
+      product.picture = orderList(product.picture!, index);
+      await productsService.saveOrCreateProduct(product);
+      isSaving = false;
+      notifyListeners();
+      // final url =
+      //     Uri.https(_baseUrl, 'products/${product.id}/picture/picture$index');
+      // final response = await http.delete(url);
+
+      //   if (response.statusCode == 200) {
+      //     productsService.selectedProduct!.picture!
+      //         .removeWhere((key, value) => key.endsWith(index));
+      //     print('Product deleted successfully');
+      //     notifyListeners();
+      //   } else {
+      //     print('Failed to delete product. Status code: ${response.statusCode}');
+      //   }
+    } catch (error) {
+      print('Error deleting product: $error');
+      isSaving = false;
       notifyListeners();
     }
   }

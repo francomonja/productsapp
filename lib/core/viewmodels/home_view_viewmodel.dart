@@ -37,11 +37,15 @@ class HomeViewViewModel extends BaseViewModel {
   bool isSaving = false;
   int navDrawerIndex = 0;
   bool isAuth = false;
-
+  String initialStock = 'Todos';
+  List<String> stockList = [
+    'Todos',
+    'Rosario',
+    'Oberá',
+  ];
   final DialogService _dialogService = locator<DialogService>();
 
   final TextEditingController search = TextEditingController();
-
   Category selectedCategory = Category(name: 'Todas las categorias');
   List<Category> categoryList = [];
   findByCategory() async {
@@ -59,6 +63,9 @@ class HomeViewViewModel extends BaseViewModel {
           .where((element) =>
               element.name.toLowerCase().contains(search.text.toLowerCase()))
           .toList();
+    }
+    if (initialStock != 'Todos') {
+      findByStock(initialStock);
     }
     notifyListeners();
   }
@@ -103,6 +110,14 @@ class HomeViewViewModel extends BaseViewModel {
 
   void onChangeCategory(value) {
     selectedCategory = value;
+    findByStock(initialStock);
+    findByCategory();
+    notifyListeners();
+  }
+
+  void onChangeStock(value) {
+    initialStock = value;
+    findByStock(initialStock);
     findByCategory();
     notifyListeners();
   }
@@ -181,5 +196,18 @@ class HomeViewViewModel extends BaseViewModel {
     );
 
     ScaffoldMessenger.of(context).showSnackBar(snackbar);
+  }
+
+  findByStock(value) async {
+    initialStock = value;
+    if (initialStock == 'Todos') {
+      productList = products;
+    } else if (initialStock == 'Rosario') {
+      productList =
+          productList.where((element) => element.stockRosario! > 0).toList();
+    } else {
+      productList = productList.where((element) => element.stock! > 0).toList();
+    }
+    notifyListeners();
   }
 }

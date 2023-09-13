@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:products_app/core/viewmodels/home_view_viewmodel.dart';
 
 import '../../core/models/product_model.dart';
 
 class ProductCard extends StatelessWidget {
+  final HomeViewViewModel vm;
   final Product product;
-  const ProductCard({super.key, required this.product});
+  const ProductCard({super.key, required this.product, required this.vm});
 
   @override
   Widget build(BuildContext context) {
@@ -30,10 +32,19 @@ class ProductCard extends StatelessWidget {
 
             //TODO mostrar de manera condicional
             Positioned(
-              top: 0,
-              left: 0,
-              child: _NotAvailable(productStock: product.stock),
-            )
+                top: 0,
+                left: 0,
+                child: vm.initialStock == 'Todos'
+                    ? _NotAvailable(
+                        name: 'Stock',
+                        productStock:
+                            product.stock! + (product.stockRosario ?? 0))
+                    : vm.initialStock == 'Oberá'
+                        ? _NotAvailable(
+                            name: 'Oberá', productStock: product.stock!)
+                        : _NotAvailable(
+                            name: 'Rosario',
+                            productStock: product.stockRosario))
           ],
         ),
       ),
@@ -53,11 +64,9 @@ BoxDecoration _cardBorders() => BoxDecoration(
         ]);
 
 class _NotAvailable extends StatelessWidget {
+  String name;
   final productStock;
-  const _NotAvailable({
-    super.key,
-    this.productStock,
-  });
+  _NotAvailable({super.key, this.productStock, required this.name});
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +87,7 @@ class _NotAvailable extends StatelessWidget {
                     style: TextStyle(color: Colors.white, fontSize: 20),
                   )
                 : Text(
-                    'Stock: ${productStock.toString()}',
+                    '$name: ${productStock.toString()}',
                     style: const TextStyle(color: Colors.white, fontSize: 8),
                   )),
       ),

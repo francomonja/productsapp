@@ -35,12 +35,18 @@ class DeleteCategoryView extends StatelessWidget {
                 ),
               ),
             ),
-            ...vm.categoryService.listCategories.map((e) => _CardType1(
+            ...vm.categoryService.listCategories.map((e) {
+              if (e.id != null) {
+                return _CardType1(
                   id: e.id!,
                   label: e.name,
                   elevation: 5,
                   vm: vm,
-                ))
+                );
+              } else {
+                return const SizedBox();
+              }
+            })
           ])));
         });
   }

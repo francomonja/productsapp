@@ -54,6 +54,17 @@ class ProductView extends StatelessWidget {
                                   ))),
                           Positioned(
                               top: 60,
+                              right: 100,
+                              child: IconButton(
+                                  onPressed: () => vm.deleteImage(
+                                      productsService.selectedProduct!, index),
+                                  icon: const Icon(
+                                    Icons.delete_forever_outlined,
+                                    size: 40,
+                                    color: Colors.white,
+                                  ))),
+                          Positioned(
+                              top: 60,
                               right: 20,
                               child: IconButton(
                                   onPressed: () async {

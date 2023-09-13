@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:products_app/core/viewmodels/home_view_viewmodel.dart';
+import 'package:products_app/ui/widgets/dropdown2_widget.dart';
 import 'package:products_app/ui/widgets/search_widget.dart';
 
 import '../../core/menu_items/menu_items.dart';
@@ -51,6 +52,11 @@ class SideMenu extends StatelessWidget {
                 onChanged: vm.onChangeCategory,
                 categoriesList: vm.categoryList,
               ),
+              DropDown2Widget(
+                onChanged: vm.onChangeStock,
+                stockList: vm.stockList,
+                initialStock: vm.initialStock,
+              )
             ],
           ),
         ),

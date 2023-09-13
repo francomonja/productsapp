@@ -19,7 +19,15 @@ class HomeView extends StatelessWidget {
       builder: (context, vm, child) {
         return Scaffold(
           appBar: AppBar(
-            title: Text(vm.selectedCategory.name),
+            title: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(vm.selectedCategory.name,
+                    style: const TextStyle(fontSize: 20)),
+                Text('Stock: ${vm.initialStock}',
+                    style: const TextStyle(fontSize: 15)),
+              ],
+            ),
           ),
           endDrawer: SideMenu(scaffoldKey: scaffoldKey, vm: vm),
           body: (vm.productList.isEmpty)
@@ -35,6 +43,7 @@ class HomeView extends StatelessWidget {
                           child: Stack(children: [
                             ProductCard(
                               product: vm.productList[index],
+                              vm: vm,
                             ),
                             vm.isAuth
                                 ? Positioned(
