@@ -34,9 +34,11 @@ class ProductViewViewModel extends ChangeNotifier {
         : '0';
     stockRosarioController.text =
         (productsService.selectedProduct!.stockRosario != null)
-            ? productsService.selectedProduct!.stock.toString()
+            ? productsService.selectedProduct!.stockRosario.toString()
             : '0';
     productsService.selectedProduct!.stock = int.parse(stockController.text);
+    productsService.selectedProduct!.stockRosario =
+        int.parse(stockRosarioController.text);
     selectedCategory = (productsService.selectedProduct!.category);
     notifyListeners();
   }
@@ -126,11 +128,7 @@ class ProductViewViewModel extends ChangeNotifier {
   }
 
   orderList(Map<String, dynamic> picture, index) {
-    // String deleteWord = 'picture';
     Map<String, dynamic> updatedMap = {};
-    // String firstKey = picture.keys.first;
-    // firstKey = firstKey.replaceAll(deleteWord, '');
-    // int first = int.parse(firstKey);
     if (index > 0) {
       for (var i = 0; i < index; i++) {
         updatedMap['picture$i'] = picture['picture$i'];
@@ -156,18 +154,6 @@ class ProductViewViewModel extends ChangeNotifier {
       await productsService.saveOrCreateProduct(product);
       isSaving = false;
       notifyListeners();
-      // final url =
-      //     Uri.https(_baseUrl, 'products/${product.id}/picture/picture$index');
-      // final response = await http.delete(url);
-
-      //   if (response.statusCode == 200) {
-      //     productsService.selectedProduct!.picture!
-      //         .removeWhere((key, value) => key.endsWith(index));
-      //     print('Product deleted successfully');
-      //     notifyListeners();
-      //   } else {
-      //     print('Failed to delete product. Status code: ${response.statusCode}');
-      //   }
     } catch (error) {
       print('Error deleting product: $error');
       isSaving = false;

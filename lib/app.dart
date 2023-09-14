@@ -10,6 +10,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stacked/stacked_annotations.dart';
 import 'package:stacked_services/stacked_services.dart';
 
+import 'core/services/dolar_service.dart';
+
 @StackedApp(
   routes: [
     MaterialRoute(page: HomeView),
@@ -29,6 +31,9 @@ import 'package:stacked_services/stacked_services.dart';
     ),
     LazySingleton(
       classType: DialogService,
+    ),
+    LazySingleton(
+      classType: DolarService,
     ),
     LazySingleton(
       classType: AuthService,

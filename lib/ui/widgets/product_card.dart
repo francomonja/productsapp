@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:products_app/core/viewmodels/home_view_viewmodel.dart';
-
+import 'package:intl/intl.dart';
 import '../../core/models/product_model.dart';
 
 class ProductCard extends StatelessWidget {
@@ -27,7 +27,7 @@ class ProductCard extends StatelessWidget {
             Positioned(
               top: 0,
               right: 0,
-              child: _PriceTag(product: product),
+              child: _PriceTag(product: product, vm: vm),
             ),
 
             //TODO mostrar de manera condicional
@@ -96,14 +96,19 @@ class _NotAvailable extends StatelessWidget {
 }
 
 class _PriceTag extends StatelessWidget {
+  final HomeViewViewModel vm;
   final Product product;
   const _PriceTag({
     super.key,
     required this.product,
+    required this.vm,
   });
 
   @override
   Widget build(BuildContext context) {
+    int dolarPrice = int.parse(vm.dolar['price']);
+    String arsPrice =
+        NumberFormat.decimalPattern().format((dolarPrice * product.price));
     return Container(
       width: 125,
       height: 35,
@@ -117,7 +122,7 @@ class _PriceTag extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Text(
-            '\$${product.price.toString()}',
+            '\$${arsPrice}',
             style: const TextStyle(color: Colors.white, fontSize: 15),
           ),
         ),

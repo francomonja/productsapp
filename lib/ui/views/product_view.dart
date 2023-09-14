@@ -222,11 +222,6 @@ class _ProductForm extends StatelessWidget {
                           vm: vm,
                           stockController: vm.stockRosarioController,
                           name: 'Stock Rosario'),
-                      // SwitchListTile.adaptive(
-                      //   title: const Text('Disponible'),
-                      //   value: product.available,
-                      //   onChanged: vm.updateAvailability,
-                      // ),
                       const SizedBox(
                         height: 10,
                       ),

@@ -1,4 +1,5 @@
 import 'package:products_app/ui/widgets/dialogs/category_form_dialog_widget.dart';
+import 'package:products_app/ui/widgets/dialogs/dolar_form_dialog_widget.dart';
 import 'package:products_app/ui/widgets/dialogs/login_form_dialog_widget.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -11,6 +12,11 @@ void setupDialogUi() {
   final builders = {
     DialogType.categoryForm: (context, request, completer) =>
         CategoryFormDialogWidget(
+          request: request,
+          completer: completer,
+        ),
+    DialogType.dolarForm: (context, request, completer) =>
+        DolarFormDialogWidget(
           request: request,
           completer: completer,
         ),

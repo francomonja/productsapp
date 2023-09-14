@@ -24,4 +24,9 @@ const appMenuItems = <MenuItem>[
     link: 'delete-view',
     icon: Icons.delete_forever_outlined,
   ),
+  MenuItem(
+    title: 'Cambiar Precio Dolar',
+    link: 'dolar-view',
+    icon: Icons.price_change_outlined,
+  ),
 ];

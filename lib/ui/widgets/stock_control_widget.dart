@@ -46,7 +46,6 @@ class StockControlWidget extends StatelessWidget {
                 controller: stockController,
                 keyboardType: TextInputType.number,
                 textAlign: TextAlign.center,
-                readOnly: true,
               ),
             ),
             IconButton(

@@ -14,8 +14,10 @@ import '../../app.locator.dart';
 import '../constants/storage_keys.dart';
 import '../enums/dialog_type.dart';
 import '../models/category_model.dart';
+import '../models/dolar_model.dart';
 import '../models/login_model.dart';
 import '../models/product_model.dart';
+import '../services/dolar_service.dart';
 import '../services/products_service.dart';
 import 'package:http/http.dart' as http;
 
@@ -28,6 +30,7 @@ class HomeViewViewModel extends BaseViewModel {
   final FlutterSecureStorage _secureStorage = locator<FlutterSecureStorage>();
 
   final CategoryService _categoryService = locator<CategoryService>();
+  final DolarService _dolarService = locator<DolarService>();
   final TextEditingController categoryController = TextEditingController();
   final String _baseUrl = 'productsapp-6ee2d-default-rtdb.firebaseio.com';
   List<Product> products = [];
@@ -38,6 +41,7 @@ class HomeViewViewModel extends BaseViewModel {
   int navDrawerIndex = 0;
   bool isAuth = false;
   String initialStock = 'Todos';
+  Map<String, dynamic> dolar = {'price': ''};
   List<String> stockList = [
     'Todos',
     'Rosario',
@@ -48,6 +52,17 @@ class HomeViewViewModel extends BaseViewModel {
   final TextEditingController search = TextEditingController();
   Category selectedCategory = Category(name: 'Todas las categorias');
   List<Category> categoryList = [];
+
+  Future<void> init() async {
+    dolar = await _dolarService.loadDolar();
+    categoryList = await categoryService.loadCategory();
+    products = await productsService.loadProducts();
+    productList = products;
+    isAuth = await _authService.isAuthenticated();
+
+    notifyListeners();
+  }
+
   findByCategory() async {
     if (selectedCategory.name == 'Todas las categorias') {
       productList = products;
@@ -67,15 +82,6 @@ class HomeViewViewModel extends BaseViewModel {
     if (initialStock != 'Todos') {
       findByStock(initialStock);
     }
-    notifyListeners();
-  }
-
-  Future<void> init() async {
-    categoryList = await categoryService.loadCategory();
-    products = await productsService.loadProducts();
-    productList = products;
-    isAuth = await _authService.isAuthenticated();
-
     notifyListeners();
   }
 
@@ -140,7 +146,10 @@ class HomeViewViewModel extends BaseViewModel {
         );
         break;
       case 'category-view':
-        dialog();
+        dialogCategory();
+        break;
+      case 'dolar-view':
+        dialogDolar();
         break;
       case 'delete-view':
         navigateToDeleteCategoryView();
@@ -148,7 +157,20 @@ class HomeViewViewModel extends BaseViewModel {
     }
   }
 
-  void dialog() async {
+  void dialogDolar() async {
+    String dolar = _dolarService.listDolar['price'];
+    var response = await _dialogService.showCustomDialog(
+      variant: DialogType.dolarForm,
+      title: 'Ingrese el precio del dolar(Actual: $dolar)',
+    );
+    if (response!.confirmed) {
+      Dolar newDolar = response.data;
+      await _dolarService.updateDolar(newDolar);
+      init();
+    }
+  }
+
+  void dialogCategory() async {
     var response = await _dialogService.showCustomDialog(
       variant: DialogType.categoryForm,
       title: 'Ingrese la categoría',
