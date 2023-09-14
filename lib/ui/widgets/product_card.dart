@@ -15,7 +15,7 @@ class ProductCard extends StatelessWidget {
       child: Container(
         margin: const EdgeInsets.only(top: 10, bottom: 10),
         width: double.infinity,
-        height: 200,
+        height: 250,
         decoration: _cardBorders(),
         child: Stack(
           alignment: Alignment.bottomLeft,
@@ -188,16 +188,16 @@ class _BackgroundImage extends StatelessWidget {
       borderRadius: BorderRadius.circular(25),
       child: Container(
         width: double.infinity,
-        height: 200,
+        height: 250,
         child: url == null
             ? const Image(
                 image: AssetImage('assets/no-image.png'),
-                fit: BoxFit.cover,
+                fit: BoxFit.fill,
               )
             : FadeInImage(
                 placeholder: const AssetImage('assets/jar-loading.gif'),
                 image: NetworkImage(url!),
-                fit: BoxFit.cover,
+                fit: BoxFit.fill,
               ),
       ),
     );

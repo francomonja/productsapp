@@ -134,6 +134,8 @@ class HomeViewViewModel extends BaseViewModel {
           name: '',
           price: 0,
           category: '',
+          stockRosario: 0,
+          stock: 0,
           picture: {},
         );
         break;
