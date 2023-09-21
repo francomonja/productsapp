@@ -23,9 +23,8 @@ class StockControlWidget extends StatelessWidget {
         Row(children: [
           Text(
             name,
-            style: const TextStyle(fontSize: 15),
+            style: const TextStyle(fontSize: 13),
           ),
-          const SizedBox(width: 5),
           IconButton(
             onPressed: () => vm.clearStock(name),
             icon: const Icon(
@@ -37,11 +36,14 @@ class StockControlWidget extends StatelessWidget {
         Row(
           children: [
             IconButton(
-              icon: Icon(Icons.arrow_downward),
+              icon: const Icon(
+                Icons.arrow_downward,
+                size: 20,
+              ),
               onPressed: () => vm.decrementStock(name),
             ),
             Container(
-              width: size.width * 0.2,
+              width: size.width * 0.15,
               child: TextField(
                 controller: stockController,
                 keyboardType: TextInputType.number,
@@ -49,7 +51,10 @@ class StockControlWidget extends StatelessWidget {
               ),
             ),
             IconButton(
-              icon: Icon(Icons.arrow_upward),
+              icon: const Icon(
+                Icons.arrow_upward,
+                size: 20,
+              ),
               onPressed: () => vm.incrementStock(name),
             ),
           ],
