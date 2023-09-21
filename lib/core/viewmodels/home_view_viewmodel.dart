@@ -139,9 +139,10 @@ class HomeViewViewModel extends BaseViewModel {
           available: false,
           name: '',
           price: 0,
-          category: '',
+          category: 'ordenar',
           stockRosario: 0,
           stock: 0,
+          cost: 0,
           picture: {},
         );
         break;

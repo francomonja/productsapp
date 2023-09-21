@@ -199,6 +199,25 @@ class _ProductForm extends StatelessWidget {
                           labelText: 'precio:',
                         ),
                       ),
+                      TextFormField(
+                        onChanged: (value) {
+                          if (double.tryParse(value) == null) {
+                            product.cost = 0;
+                          } else {
+                            product.cost = double.parse(value);
+                          }
+                        },
+                        initialValue: '${product.cost}',
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(
+                              RegExp(r'^(\d+)?\.?\d{0,2}'))
+                        ],
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecorations.authInputDecoration(
+                          hintText: '\$150',
+                          labelText: 'costo:',
+                        ),
+                      ),
                       const SizedBox(
                         height: 30,
                       ),

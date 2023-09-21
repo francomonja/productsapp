@@ -24,7 +24,7 @@ class ProductViewViewModel extends ChangeNotifier {
   TextEditingController stockRosarioController = TextEditingController();
   File? newPictureFile;
   List<Category> categoryList = [];
-  String selectedCategory = 'Todas las categorias';
+  String selectedCategory = 'ordenar';
   bool isSaving = false;
 
   Future<void> init() async {

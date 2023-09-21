@@ -10,10 +10,12 @@ class Product {
   String? description;
   int? stock;
   int? stockRosario;
+  double? cost;
 
   Product({
     this.description,
     this.stock,
+    this.cost,
     this.stockRosario,
     required this.available,
     required this.name,
@@ -40,6 +42,7 @@ class Product {
         category: json["category"],
         description: json["description"],
         stock: json["stock"],
+        cost: json["cost"],
         stockRosario: json["stockRosario"],
       );
 
@@ -52,6 +55,7 @@ class Product {
         "category": category,
         "description": description,
         "stock": stock,
+        "cost": cost,
         "stockRosario": stockRosario,
       };
 
@@ -64,6 +68,7 @@ class Product {
         category: category,
         description: description,
         stock: stock,
+        cost: cost,
         stockRosario: stockRosario,
       );
 }

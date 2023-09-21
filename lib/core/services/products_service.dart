@@ -41,7 +41,8 @@ class ProductsService {
     } catch (error) {
       print('Error: $error');
     }
-    tempProduct.sort((a, b) => a.name.compareTo(b.name));
+    tempProduct
+        .sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
     return tempProduct;
   }
 

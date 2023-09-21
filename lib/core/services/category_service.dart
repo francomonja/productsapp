@@ -28,7 +28,8 @@ class CategoryService {
     } catch (error) {
       print('Error: $error');
     }
-    categoryList.sort((a, b) => a.name.compareTo(b.name));
+    categoryList
+        .sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
     Category firstCategory = Category(name: 'Todas las categorias');
     int index = categoryList
         .indexWhere((category) => category.name == firstCategory.name);
