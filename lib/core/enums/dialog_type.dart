@@ -3,4 +3,5 @@ enum DialogType {
   categoryForm,
   dolarForm,
   loginForm,
+  confirmation,
 }

@@ -1,4 +1,5 @@
 import 'package:products_app/ui/widgets/dialogs/category_form_dialog_widget.dart';
+import 'package:products_app/ui/widgets/dialogs/confirmation_dialog_widget.dart';
 import 'package:products_app/ui/widgets/dialogs/dolar_form_dialog_widget.dart';
 import 'package:products_app/ui/widgets/dialogs/login_form_dialog_widget.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -22,6 +23,11 @@ void setupDialogUi() {
         ),
     DialogType.loginForm: (context, request, completer) =>
         LoginFormDialogWidget(
+          request: request,
+          completer: completer,
+        ),
+    DialogType.confirmation: (context, request, completer) =>
+        ConfirmationDialogWidget(
           request: request,
           completer: completer,
         ),

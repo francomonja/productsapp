@@ -27,6 +27,7 @@ class HomeViewViewModel extends BaseViewModel {
   final categoryService = locator<CategoryService>();
   final AuthService _authService = locator<AuthService>();
 
+  final DialogService _dialogService = locator<DialogService>();
   final FlutterSecureStorage _secureStorage = locator<FlutterSecureStorage>();
 
   final CategoryService _categoryService = locator<CategoryService>();
@@ -47,7 +48,6 @@ class HomeViewViewModel extends BaseViewModel {
     'Rosario',
     'Oberá',
   ];
-  final DialogService _dialogService = locator<DialogService>();
 
   final TextEditingController search = TextEditingController();
   Category selectedCategory = Category(name: 'Todas las categorias');
@@ -107,6 +107,10 @@ class HomeViewViewModel extends BaseViewModel {
     await _navigationService.navigateToDeleteCategoryView();
   }
 
+  void navigateToShoppingView() async {
+    await _navigationService.navigateToShoppingView();
+  }
+
   void onDelete(id) async {
     await productsService.onDelete(id);
     productList.removeWhere((element) => element.id == id);
@@ -154,6 +158,9 @@ class HomeViewViewModel extends BaseViewModel {
         break;
       case 'delete-view':
         navigateToDeleteCategoryView();
+        break;
+      case 'shopping-view':
+        navigateToShoppingView();
         break;
     }
   }

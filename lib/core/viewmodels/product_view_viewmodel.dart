@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -7,7 +6,6 @@ import 'package:products_app/core/models/category_model.dart';
 import 'package:products_app/core/services/category_service.dart';
 import 'package:products_app/core/services/products_service.dart';
 import 'package:stacked_services/stacked_services.dart';
-import 'package:http/http.dart' as http;
 
 import '../../app.locator.dart';
 import '../models/product_model.dart';

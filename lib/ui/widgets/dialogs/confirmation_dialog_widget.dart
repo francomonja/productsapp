@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:products_app/core/models/category_model.dart';
+import 'package:products_app/core/viewmodels/dialogs/confirmation_dialog_viewmodel.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
-import '../../../core/viewmodels/dialogs/category_form_dialog_viewmodel.dart';
-import '../custom_input.dart';
 import 'basic_dialog_widget.dart';
 
-class CategoryFormDialogWidget extends StatelessWidget {
-  const CategoryFormDialogWidget({
+class ConfirmationDialogWidget extends StatelessWidget {
+  const ConfirmationDialogWidget({
     super.key,
     required this.request,
     required this.completer,
@@ -19,8 +18,8 @@ class CategoryFormDialogWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<CategoryFormDialogViewModel>.reactive(
-        viewModelBuilder: () => CategoryFormDialogViewModel(),
+    return ViewModelBuilder<ConfirmationDialogViewmodel>.reactive(
+        viewModelBuilder: () => ConfirmationDialogViewmodel(),
         builder: (context, vm, child) {
           return BasicDialog(
             request: DialogRequest(
@@ -29,15 +28,8 @@ class CategoryFormDialogWidget extends StatelessWidget {
                     child: Stack(children: [
                   Column(
                     children: [
-                      CustomInput(
-                        controller: vm.categoryController,
-                        label: 'categoria',
-                      ),
-                      ...vm.errors.map(
-                        (e) => Text(
-                          '-$e',
-                          style: TextStyle(color: Colors.red),
-                        ),
+                      SizedBox(
+                        height: 50,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -47,20 +39,16 @@ class CategoryFormDialogWidget extends StatelessWidget {
                                 completer(DialogResponse(confirmed: false));
                               },
                               child: Container(
-                                child: Text('cancelar'),
+                                child: const Text('Cancelar'),
                               )),
                           GestureDetector(
                             onTap: () {
-                              if (vm.validate()) {
-                                completer(DialogResponse(
-                                    confirmed: true,
-                                    data: Category(
-                                      name: vm.categoryController.text,
-                                    )));
-                              }
+                              completer(DialogResponse(
+                                confirmed: true,
+                              ));
                             },
                             child: Container(
-                              child: Text('crear'),
+                              child: const Text('Confirmar'),
                             ),
                           )
                         ],

@@ -64,9 +64,9 @@ BoxDecoration _cardBorders() => BoxDecoration(
         ]);
 
 class _NotAvailable extends StatelessWidget {
-  String name;
+  final String name;
   final productStock;
-  _NotAvailable({super.key, this.productStock, required this.name});
+  const _NotAvailable({super.key, this.productStock, required this.name});
 
   @override
   Widget build(BuildContext context) {

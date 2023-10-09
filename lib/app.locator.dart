@@ -13,6 +13,7 @@ import 'package:stacked_services/src/navigation/navigation_service.dart';
 import 'package:stacked_shared/stacked_shared.dart';
 
 import 'core/services/auth_service.dart';
+import 'core/services/cart_service.dart';
 import 'core/services/category_service.dart';
 import 'core/services/dolar_service.dart';
 import 'core/services/products_service.dart';
@@ -34,6 +35,7 @@ Future<void> setupLocator({
   locator.registerLazySingleton(() => DialogService());
   locator.registerLazySingleton(() => DolarService());
   locator.registerLazySingleton(() => AuthService());
+  locator.registerLazySingleton(() => CartService());
   locator.registerLazySingleton(() => FlutterSecureStorage());
   final sharedPreferences = await SharedPreferences.getInstance();
   locator.registerSingleton(sharedPreferences);

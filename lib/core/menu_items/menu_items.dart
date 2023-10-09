@@ -29,4 +29,9 @@ const appMenuItems = <MenuItem>[
     link: 'dolar-view',
     icon: Icons.price_change_outlined,
   ),
+  MenuItem(
+    title: 'Hacer pedido',
+    link: 'shopping-view',
+    icon: Icons.shopping_cart_outlined,
+  ),
 ];
