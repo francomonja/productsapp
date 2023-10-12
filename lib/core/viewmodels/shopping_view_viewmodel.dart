@@ -88,7 +88,7 @@ class ShoppingViewViewmodel extends BaseViewModel {
     notifyListeners();
     switch (menuItemShop.link) {
       case 'shop-recived':
-        dialogConfirmation();
+        dialogConfirmation(context);
         break;
       case 'shop-preview':
         navigateToProductView();
@@ -99,13 +99,50 @@ class ShoppingViewViewmodel extends BaseViewModel {
     }
   }
 
-  void dialogConfirmation() async {
+  void dialogConfirmation(context) async {
     var response = await _dialogService.showCustomDialog(
       variant: DialogType.confirmation,
       title: '¿Confirmar que el pedido llegó?',
     );
     if (response!.confirmed) {
+      await saveCart(context);
+      await changeStock(orderCart);
+      resetCart(context);
+      notifyListeners();
       print('confirmado');
     }
+  }
+
+  changeStock(Map<String, String> orderCart) async {
+    List<Product> addProducts = [];
+    for (var i = 0; i < orderCart.length; i++) {
+      final List<MapEntry<String, String>> entries = orderCart.entries.toList();
+      final MapEntry<String, String> entry = entries[i];
+      final String clave = entry.key;
+      final String valor = entry.value;
+      shopList.where((element) {
+        if (element.name == clave) {
+          if (element.stock! < int.parse(valor)) {
+            element.stock = 0;
+            element.stockRosario = element.stockRosario! + int.parse(valor);
+            addProducts.add(element);
+          } else {
+            element.stock = element.stock! - int.parse(valor);
+            element.stockRosario = element.stockRosario! + int.parse(valor);
+            addProducts.add(element);
+          }
+        }
+        return true;
+      }).toList();
+    }
+
+    await saveProducts(addProducts);
+    return addProducts;
+  }
+
+  saveProducts(List<Product> addProducts) {
+    addProducts.forEach((element) async {
+      await productsService.saveOrCreateProduct(element);
+    });
   }
 }
