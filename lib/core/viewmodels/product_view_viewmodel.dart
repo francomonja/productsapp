@@ -7,6 +7,8 @@ import 'package:products_app/core/services/category_service.dart';
 import 'package:products_app/core/services/products_service.dart';
 import 'package:stacked_services/stacked_services.dart';
 
+import 'package:products_app/core/providers/product_form_provider.dart';
+
 import '../../app.locator.dart';
 import '../models/product_model.dart';
 
@@ -64,8 +66,24 @@ class ProductViewViewModel extends ChangeNotifier {
   }
 
   Future saveOrCreateProduct(Product product) async {
+    final productForm = ProductFormProvider(productsService.selectedProduct!);
     isSaving = true;
     notifyListeners();
+
+    if (productForm.isValidForm()) return;
+    final List<String?>? imageUrl = await productsService.uploadImage();
+    final Map<String, dynamic> picture = productForm.product.picture ?? {};
+
+    if (imageUrl != null) {
+      for (int i = 0; i < imageUrl.length; i++) {
+        picture['picture$i'] = imageUrl[i];
+      }
+      productForm.product.picture = picture;
+    } else if (productsService.selectedProduct!.picture!.isEmpty) {
+      picture['picture0'] =
+          "https://res.cloudinary.com/dgagjc77g/image/upload/v1694473012/imagen-no-disponible_advark.jpg";
+    }
+
     if (productsService.selectedProduct!.stock == 0) {
       productsService.selectedProduct!.available = false;
     } else {

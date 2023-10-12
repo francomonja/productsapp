@@ -101,23 +101,6 @@ class ProductView extends StatelessWidget {
               onPressed: productsService.isSaving
                   ? null
                   : () async {
-                      if (productForm.isValidForm()) return;
-                      final List<String?>? imageUrl =
-                          await productsService.uploadImage();
-                      final Map<String, dynamic> picture =
-                          productForm.product.picture ?? {};
-
-                      if (imageUrl != null) {
-                        for (int i = 0; i < imageUrl.length; i++) {
-                          picture['picture$i'] = imageUrl[i];
-                        }
-                        productForm.product.picture = picture;
-                      } else if (vm
-                          .productsService.selectedProduct!.picture!.isEmpty) {
-                        picture['picture0'] =
-                            "https://res.cloudinary.com/dgagjc77g/image/upload/v1694473012/imagen-no-disponible_advark.jpg";
-                      }
-
                       await vm.saveOrCreateProduct(productForm.product);
                       Navigator.of(context).pop();
                     },
