@@ -111,6 +111,17 @@ class HomeViewViewModel extends BaseViewModel {
     await _navigationService.navigateToShoppingView();
   }
 
+  void deleteDialog(id, context) async {
+    var response = await _dialogService.showCustomDialog(
+      variant: DialogType.delete,
+      title: '¿Desea eliminar el producto?',
+    );
+    if (response!.confirmed) {
+      onDelete(id);
+      notifyListeners();
+    }
+  }
+
   void onDelete(id) async {
     await productsService.onDelete(id);
     productList.removeWhere((element) => element.id == id);

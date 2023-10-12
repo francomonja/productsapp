@@ -31,6 +31,11 @@ void setupDialogUi() {
           request: request,
           completer: completer,
         ),
+    DialogType.delete: (context, request, completer) =>
+        ConfirmationDialogWidget(
+          request: request,
+          completer: completer,
+        ),
   };
 
   dialogService.registerCustomDialogBuilders(builders);

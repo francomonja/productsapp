@@ -4,4 +4,5 @@ enum DialogType {
   dolarForm,
   loginForm,
   confirmation,
+  delete,
 }

@@ -3,6 +3,7 @@ import 'dart:convert';
 class Product {
   bool available;
   String name;
+  String? supplier;
   Map<String, dynamic>? picture;
   double price;
   String? id;
@@ -19,6 +20,7 @@ class Product {
     this.stockRosario,
     required this.available,
     required this.name,
+    this.supplier,
     this.picture,
     required this.price,
     this.id,
@@ -35,6 +37,7 @@ class Product {
       Product(
         available: json["available"],
         name: json["name"],
+        supplier: json["supplier"],
         id: json["id"],
         picture:
             Map<String, dynamic>.from(json["picture"] as Map<String, dynamic>),
@@ -49,6 +52,7 @@ class Product {
   Map<String, dynamic> toJson() => {
         "available": available,
         "name": name,
+        "supplier": supplier,
         "id": id,
         "picture": picture,
         "price": price,
@@ -62,6 +66,7 @@ class Product {
   Product copy() => Product(
         available: available,
         name: name,
+        supplier: supplier,
         price: price,
         picture: picture,
         id: id,

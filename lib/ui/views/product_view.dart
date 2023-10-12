@@ -183,6 +183,15 @@ class _ProductForm extends StatelessWidget {
                         ),
                       ),
                       TextFormField(
+                        onChanged: (value) => product.supplier = value,
+                        maxLines: null,
+                        initialValue: product.supplier,
+                        decoration: InputDecorations.authInputDecoration(
+                          hintText: 'Proveedor',
+                          labelText: 'Proveedor:',
+                        ),
+                      ),
+                      TextFormField(
                         onChanged: (value) {
                           if (double.tryParse(value) == null) {
                             product.cost = 0;

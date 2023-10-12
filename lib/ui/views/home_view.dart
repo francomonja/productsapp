@@ -51,7 +51,9 @@ class HomeView extends StatelessWidget {
                                     right: 20,
                                     child: IconButton(
                                         onPressed: () {
-                                          vm.onDelete(vm.productList[index].id);
+                                          vm.deleteDialog(
+                                              vm.productList[index].id,
+                                              context);
                                         },
                                         icon: const Icon(
                                           Icons.delete_forever,

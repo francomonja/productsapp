@@ -3,10 +3,11 @@ import 'package:products_app/core/viewmodels/dialogs/confirmation_dialog_viewmod
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
+import '../../../core/viewmodels/dialogs/delete_dialog_viewmodel.dart';
 import 'basic_dialog_widget.dart';
 
-class ConfirmationDialogWidget extends StatelessWidget {
-  const ConfirmationDialogWidget({
+class DeleteDialogWidget extends StatelessWidget {
+  const DeleteDialogWidget({
     super.key,
     required this.request,
     required this.completer,
@@ -17,8 +18,8 @@ class ConfirmationDialogWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<ConfirmationDialogViewmodel>.reactive(
-        viewModelBuilder: () => ConfirmationDialogViewmodel(),
+    return ViewModelBuilder<DeleteDialogViewmodel>.reactive(
+        viewModelBuilder: () => DeleteDialogViewmodel(),
         builder: (context, vm, child) {
           return BasicDialog(
             request: DialogRequest(
